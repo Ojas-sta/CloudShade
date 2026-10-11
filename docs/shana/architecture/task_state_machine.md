@@ -220,7 +220,66 @@ is engaged, only a human can release it.
 
 ---
 
-## Testable properties
+## 🔴 State → published message mapping
+
+**This machine is the single source of truth for delivery status.** The mapping
+below is authoritative and versioned with the machine. It is published in
+[`cloudlight_integration.md`](cloudlight_integration.md) §3 and mirrored in
+`docs/integration/interface_contracts.md`.
+
+⚠️ **Publishes every state. No state is internal-only.** `PAUSED` is published
+because a paused robot is a physical fact a teacher must be able to see.
+
+| State | Published message | Terminal | Human action required |
+|---|---|---|---|
+| `QUEUED` | `status.assigned` | — | None |
+| `VALIDATING` | `status.assigned` (unchanged) | — | None |
+| `READY` | `status.assigned` (unchanged) | — | None |
+| `NAVIGATING_TO_PICKUP` | `status.en_route` | — | None — **robot is moving** |
+| `AWAITING_LOADING_CONFIRMATION` | `status.awaiting_loading` | — | 🔴 **Yes — a person must load** |
+| `NAVIGATING_TO_DESTINATION` | `status.en_route` | — | None — **robot is moving** |
+| `AWAITING_RECIPIENT` | `status.awaiting_recipient` | — | 🔴 **Yes — go to the robot now** |
+| `PAUSED` | `status.paused` | — | ⚠️ **Yes — operator action** |
+| `COMPLETED` | `status.delivered` | ✅ | None — already done |
+| `CANCELLED` | `status.cancelled` | ✅ | None |
+| `FAILED` | `status.error` | ✅ | None |
+
+### Messages that are not state transitions
+
+| Message | When | Note |
+|---|---|---|
+| `status.ready` | Robot idle, no task | Subsystem availability, **not** a delivery state |
+| `status.blocked` | Corridor blocked, robot holding | Overlay on the current state; never replaces it |
+| `status.estop` | Emergency stop engaged | 🔴 **Out-of-band.** Halts the current task → `FAILED` or `PAUSED` |
+
+### 🔴 Rules governing this mapping
+
+| # | Rule | Rationale |
+|---|---|---|
+| M-1 | 🔴 **`AWAITING_RECIPIENT` and `NAVIGATING_TO_DESTINATION` must never collapse into one display value** | One means *"wait"*; the other means *"go to the robot now"*. Merging tells a teacher the opposite of the truth |
+| M-2 | 🔴 **`PAUSED` must appear in any consumer's display model** | A paused robot shown as "on the way" sends a person to an empty corridor |
+| M-3 | 🔴 **`status.estop` is out-of-band and takes precedence over every state** | A stop is not a delivery status |
+| M-4 | **`status.ready` is never a delivery state** | It describes the robot, not the task |
+| M-5 | **Validation rejection routes to `CANCELLED`, not a `REJECTED` state** | See below |
+| M-6 | Every transition is published with a timestamp and the **state it came from** | No status is ever presented without its age |
+
+### ⚠️ On `REJECTED`
+
+SHANA has no `REJECTED` state. A validator rejection is a `CANCELLED` transition
+carrying `failure_reason`, e.g. `"Destination is not approved"` (E-07).
+
+⚠️ **A consumer that needs to distinguish *rejected* from *withdrawn* must read
+`failure_reason`, not invent a state SHANA cannot emit.**
+
+### Known defect
+
+⚠️ **`status.awaiting_loading` and `status.awaiting_recipient` do not yet appear in
+`cloudlight_integration.md` §3**, which lists only eight messages. This table is
+the correction. Until the interface contract is agreed
+([`CONF-02` / `CONF-08`](../../integration/unresolved_conflicts.md)), the two
+messages above are **`Proposed` additions**.
+
+---
 
 A test suite should demonstrate:
 

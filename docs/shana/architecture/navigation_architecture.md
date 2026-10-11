@@ -78,7 +78,7 @@ mandatory rather than preferred** — see
 | Element | Approach | Status |
 |---|---|---|
 | Route representation | Route graph over surveyed corridors | `DESIGN_ONLY` |
-| Corridor states | 4 states, **human-declared** (`D-031`) | `DESIGN_ONLY` |
+| Corridor states | 4 states, **human-declared** ([ADR-007](architecture_decisions/ADR-007-corridor-state-human-declared.md)) | `DESIGN_ONLY` |
 | Congestion avoidance | Alternate routing on `BUSY` | `DESIGN_ONLY` |
 | Dynamic replanning | On `BLOCKED` | `DESIGN_ONLY` |
 | Stairs | ⛔ **Excluded** — C-3 | — |

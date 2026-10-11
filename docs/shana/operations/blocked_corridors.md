@@ -41,7 +41,7 @@ therefore untraversable.
 | Automated blockage detection | 🔴 **Not implemented** |
 | CCTV-based detection | ⛔ **Deprecated — privacy grounds** |
 | Camera-based detection | ⚠️ Proposed; adds privacy cost |
-| Manual declaration | ⚠️ **Current basis** (`D-031`, provisional) |
+| Manual declaration | ⚠️ **Current basis** ([ADR-009](../architecture/architecture_decisions/ADR-009-manual-occupancy-before-sensing.md), provisional) |
 
 ⚠️ **The system depends on staff discipline with no automatic backup.** If
 declarations are not made, the robot simply stops. This is safe but

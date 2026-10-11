@@ -16,8 +16,20 @@ responsible for, and where the two meet.
 | `data/schemas/**` | Shared — SHANA authored | ⚠️ Propose changes via interface revision |
 | `questionnaires/**` | SHANA | ✅ Read, write |
 
-🔴 **`docs/cloudlight/` was empty at the 2026-10-11 audit.** SHANA has **no
-visibility** into CloudLight's implementation, schedule, or assumptions. Any
+⚠️ **`docs/cloudlight/` was empty when SHANA wrote this document** (audit of
+2026-10-11). 🔴 **That is no longer true — Agent 2's documentation now exists
+(47 documents).**
+
+**This document was therefore written in isolation, and a partner proposal has
+since appeared.** Agent 2's own
+[`shana_integration.md`](../../cloudlight/shana_integration.md) states the same
+thing about SHANA. 🔴 **Neither document was aware of the other. That isolation
+is the defect recorded as `CONF-01` and `CONF-02`.**
+
+⚠️ **This file has now been read against Agent 2's document.** Where they
+disagree — chiefly on the status vocabulary — see
+[`../handoff/RESPONSE_TO_AGENT_3.md`](../handoff/RESPONSE_TO_AGENT_3.md) R4 and
+§3 below. Any
 statement about CloudLight in SHANA documents is a *proposal*, not a description
 of something that exists.
 
@@ -45,7 +57,7 @@ CloudLight is unreachable, late, or wrong.
 | Responsibility | Notes |
 |---|---|
 | Higher-level building intelligence | Outside SHANA's remit |
-| Occupancy and scheduling intelligence | ⚠️ Currently human-declared — see `D-031` |
+| Occupancy and scheduling intelligence | 🔴 **Never** a route-safety input — see [ADR-009](architecture_decisions/ADR-009-manual-occupancy-before-sensing.md) |
 | User-facing interfaces | Out of SHANA scope |
 | Aggregated reporting | Out of SHANA scope |
 
@@ -80,6 +92,29 @@ SHANA proposes to consume commands and publish status. Proposed shapes are in
 | `status.delivered` | Handover confirmed |
 | `status.error` | Failure, with reason code |
 | `status.estop` | 🛑 Emergency stop engaged |
+| `status.awaiting_loading` | 🔴 Robot holding; **a person must load** |
+| `status.awaiting_recipient` | 🔴 Robot holding at destination; **a person must collect** |
+| `status.paused` | ⚠️ Halted by an operator; robot is holding |
+| `status.cancelled` | Task ended without completion |
+
+#### 🔴 Authoritative mapping
+
+⚠️ **This list is derived from, and subordinate to, the state machine.**
+The authoritative `state → status.*` mapping is in
+[`task_state_machine.md`](task_state_machine.md) §State → published message
+mapping. If this table and that one disagree, **the state machine wins**.
+
+⚠️ `status.arrived` is retained for backward compatibility but is **redundant
+with `status.awaiting_recipient`** — a robot that has arrived *is* awaiting its
+recipient. 🔴 `status.arrived` must **never** be rendered as "delivered":
+completion requires explicit recipient confirmation (`D-007`, `AGENTS.md` §L.4).
+
+#### Three states previously unpublished
+
+⚠️ Before 2026-10-11 this list omitted `PAUSED`, `AWAITING_LOADING_CONFIRMATION`
+and `AWAITING_RECIPIENT` — the states in which **a human must act**. That was the
+defect recorded as `CONF-02` and `CONF-08`. All three are now published.
+🔴 **`PAUSED` in particular may never be collapsed into "on the way."**
 
 ---
 
@@ -124,13 +159,15 @@ how of movement is SHANA's alone.
 |---|---|---|
 | 6.1 | Interface concept | `DESIGN_ONLY` |
 | 6.2 | Proposed message schemas | `DESIGN_ONLY` — never validated |
-| 6.3 | CloudLight counterpart | `UNKNOWN` — owned elsewhere |
-| 6.4 | Shared schema agreement | ⚠️ **Not agreed.** No joint session has occurred |
+| 6.3 | CloudLight counterpart | ✅ **Now exists** — 47 documents, incl. Agent 2's own `shana_integration.md` |
+| 6.4 | Shared schema agreement | 🔴 **Not agreed.** Both proposals exist; neither has been reconciled |
 | 6.5 | Integration testing | `BLOCKED` — cannot test against nothing |
 
-⚠️ **This is a proposal made in isolation.** A real integration requires a joint
-session with the CloudLight owner to agree schemas, error codes, and timeout
-behaviour. **That has not happened.**
+⚠️ **This proposal and Agent 2's were written independently and disagree on the
+status vocabulary.** Agent 1 has reviewed Agent 2's document and recorded a
+position in [`../handoff/RESPONSE_TO_AGENT_3.md`](../handoff/RESPONSE_TO_AGENT_3.md)
+R4. 🔴 **Agreement has not occurred.** The reconciliation is Agent 3's to
+publish.
 
 ---
 
@@ -141,7 +178,7 @@ behaviour. **That has not happened.**
 | 1 | Agree the message schema in a joint session before either side writes code |
 | 2 | Define timeout and retry semantics explicitly |
 | 3 | Define a version-negotiation strategy — schemas will change |
-| 4 | Define who is authoritative for occupancy data (`D-031` is provisional) |
+| 4 | Define who is authoritative for occupancy data ([ADR-007](architecture_decisions/ADR-007-corridor-state-human-declared.md), [ADR-009](architecture_decisions/ADR-009-manual-occupancy-before-sensing.md)) |
 | 5 | 🔴 Write the invariant list above into the shared contract, not only here |
 | 6 | Keep the SHANA-side validation non-bypassable regardless of partner pressure |
 
