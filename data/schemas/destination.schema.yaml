@@ -1,0 +1,51 @@
+# PROPOSED — not implemented. Documentation only.
+schema_version: 1
+status: DRAFT
+notes: >
+  Every ACTIVE destination requires verified_by and verified_pose_date.
+  Status defaults to NEEDS_SURVEY. A free-text destination field does not exist
+  by design: destination_id is the only accepted reference.
+
+fields:
+  destination_id:      { type: string,  required: true,  immutable: true }
+  display_name:         { type: string,  required: true }
+  block:                { type: string,  required: true }
+  floor:                { type: integer, required: true }
+  floor_map_id:         { type: string,  required: true }
+  graph_node_id:        { type: string,  required: true }
+
+  approach_pose:
+    type: object
+    required: true
+    fields:
+      x_m:              { type: number, required: true }
+      y_m:              { type: number, required: true }
+      yaw_rad:          { type: number, required: true }
+      verified:         { type: boolean, required: true, default: false }
+      notes:            { type: string, required: false }
+
+  arrival_fiducial_id:  { type: string,  required: false }
+  allowed_origins:      { type: array,   required: true, items: string }
+  allowed_items:        { type: array,   required: true, items: string }
+  max_payload_kg:       { type: number,  required: true }
+
+  floor_transition:    { type: enum,     required: true,
+                          values: [NONE, ESCORTED_LIFT, STAIRS], default: NONE }
+
+  status:               { type: enum,     required: true,
+                          values: [ACTIVE, BLOCKED, NEEDS_SURVEY],
+                          default: NEEDS_SURVEY }
+
+  verified_by:          { type: string,  required: false }
+  verified_pose_date:   { type: date,    required: false }
+  verification_expires: { type: date,    required: false }
+
+validation:
+  - if status == ACTIVE then verified_by and verified_pose_date are required
+  - approach_pose.verified must be true before status may become ACTIVE
+  - floor_transition must be NONE unless explicitly authorised in writing
+
+prohibited_fields:
+  - any student or staff identifier
+  - any camera or image reference
+  - any occupancy count tied to an individual

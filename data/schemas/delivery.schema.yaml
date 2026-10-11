@@ -1,0 +1,53 @@
+# PROPOSED — not implemented. Documentation only.
+schema_version: 1
+status: DRAFT
+notes: >
+  COMPLETED requires recipient_confirmed == true.
+  Arrival at a destination is never sufficient.
+
+fields:
+  delivery_id:        { type: string, required: true }
+  state:              { type: enum, required: true,
+                        values: [QUEUED, VALIDATING, READY,
+                                 NAVIGATING_TO_PICKUP,
+                                 AWAITING_LOADING_CONFIRMATION,
+                                 NAVIGATING_TO_DESTINATION,
+                                 AWAITING_RECIPIENT,
+                                 COMPLETED, PAUSED, CANCELLED, FAILED] }
+
+  origin_id:          { type: string, required: true }
+  destination_id:     { type: string, required: true }
+  item_id:            { type: string, required: true }
+  item_weight_kg:     { type: number, required: true }
+
+  requested_by:       { type: string, required: true, description: teacher role id }
+  requested_at:       { type: timestamp, required: true }
+
+  model_derived:      { type: boolean, required: true, default: false }
+  human_confirmed:    { type: boolean, required: false }
+
+  planned_route:      { type: array, required: false, items: string }
+  loaded_confirmed:   { type: boolean, required: false }
+  recipient_confirmed:{ type: boolean, required: false }
+
+  started_at:         { type: timestamp, required: false }
+  completed_at:       { type: timestamp, required: false }
+  duration_s:         { type: number, required: false }
+
+  battery_start_pct:  { type: number, required: false }
+  battery_end_pct:    { type: number, required: false }
+
+  interventions:      { type: integer, required: true, default: 0 }
+  failure_reason:     { type: string, required: false }
+  transitions:        { type: array, required: true, description: audit log }
+
+validation:
+  - state == COMPLETED requires recipient_confirmed == true
+  - model_derived == true requires human_confirmed == true before READY
+  - state == FAILED requires failure_reason
+  - no free-text destination field exists
+
+prohibited_fields:
+  - recipient name in any free-text note
+  - any student or staff identifier beyond the requesting role id
+  - any behavioural or attendance attribute

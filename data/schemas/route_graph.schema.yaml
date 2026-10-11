@@ -1,0 +1,55 @@
+# PROPOSED — not implemented. Documentation only.
+schema_version: 1
+status: DRAFT
+notes: >
+  An edge means "physically connected and verified by a person".
+  It does NOT mean "permitted for this robot". The planner enforces
+  authorised_for_robot and floor_transition separately.
+
+nodes:
+  node_id:        { type: string, required: true }
+  block:          { type: string, required: true }
+  floor:          { type: integer, required: true }
+  is_checkpoint:  { type: boolean, required: false, default: false }
+  surveyed_by:    { type: string, required: true }
+  surveyed_date:  { type: date, required: true }
+
+edges:
+  edge_id:              { type: string, required: true }
+  from_node:            { type: string, required: true }
+  to_node:              { type: string, required: true }
+  clear_width_m:        { type: number, required: true }
+  floor_surface:        { type: enum, required: true,
+                          values: [tile, terrazzo, vinyl, carpet, concrete, other] }
+  threshold_heights_mm: { type: array, required: false, items: number }
+  ramp_gradient_deg:    { type: number, required: false }
+
+  authorised_for_robot: { type: boolean, required: true, default: false }
+  authorised_by:        { type: string, required: false }
+
+  floor_transition:    { type: enum, required: true,
+                          values: [NONE, STAIRS, ESCORTED_LIFT], default: NONE }
+
+  max_speed_mps:        { type: number, required: true }
+  fire_route:           { type: boolean, required: true, default: false }
+
+  state:
+    type: enum
+    values: [AVAILABLE, BUSY, HAZARD, CLOSED, UNKNOWN]
+    default: UNKNOWN
+
+  occupancy_confidence: { type: number, required: false, min: 0, max: 1 }
+  last_updated:         { type: timestamp, required: true }
+  state_changed_by:     { type: string, required: false }
+
+validation:
+  - fire_route edges must never appear in any computed route
+  - edges with authorised_for_robot == false must never be traversed
+  - edges with floor_transition != NONE must never be traversed unless the
+    transition is explicitly authorised in writing
+  - a CLOSED edge must not expire automatically
+  - an expired or missing state resolves to UNKNOWN, never AVAILABLE
+
+prohibited_fields:
+  - any personal identifier
+  - any occupancy attribution to an individual

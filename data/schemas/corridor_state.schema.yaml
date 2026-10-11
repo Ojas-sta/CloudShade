@@ -1,0 +1,31 @@
+# PROPOSED — not implemented. Documentation only.
+schema_version: 1
+status: DRAFT
+notes: >
+  Sensors may raise a prompt. Only an authorised human may change state.
+  CLOSED never expires automatically.
+
+fields:
+  edge_id:            { type: string, required: true }
+  state:              { type: enum, required: true,
+                        values: [AVAILABLE, BUSY, HAZARD, CLOSED, UNKNOWN],
+                        default: UNKNOWN }
+  reason:             { type: string, required: false }
+  changed_by:         { type: string, required: true, description: authorised role id }
+  changed_at:         { type: timestamp, required: true }
+  expires_at:         { type: timestamp, required: false,
+                        note: "absent for CLOSED — closed edges do not expire" }
+  source:             { type: enum, required: true,
+                        values: [FACILITIES, HOUSEKEEPING, STAFF_REPORT, SENSOR_ADVISORY] }
+
+  occupancy_confidence: { type: number, required: false, min: 0, max: 1 }
+
+validation:
+  - source == SENSOR_ADVISORY may never set state to CLOSED or HAZARD directly
+  - an expired entry resolves to UNKNOWN
+  - UNKNOWN is never treated as AVAILABLE by any planner
+  - reopening a CLOSED edge requires a named authorised person
+
+prohibited_fields:
+  - any count attributable to an identifiable person
+  - any image, frame, or video reference

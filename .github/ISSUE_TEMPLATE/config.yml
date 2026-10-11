@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a safety or privacy concern
+    url: https://EXAMPLE.invalid/contact
+    about: ⚠️ Do NOT open a public issue for safety or privacy concerns. Contact the repository owner directly.
+  - name: Corrections are welcome
+    url: https://EXAMPLE.invalid/corrections
+    about: Use the "Report an error in the documentation" template. This is the most valuable contribution.

@@ -1,0 +1,122 @@
+# SHANA — research phase
+# No production code is expected in this repository yet.
+
+# --- OS / editor noise -------------------------------------------------
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/
+# Obsidian vault config — machine-specific workspace/session state, not project content.
+# Added by the integration lead (Agent 3); see docs/integration/AGENT_COORDINATION.md.
+.obsidian/
+
+# --- SECRETS — never commit --------------------------------------------
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+credentials/
+*.secret
+*_rsa
+*_ed25519
+.netrc
+.npmrc
+.pypirc
+
+# --- Credentials specific to this project -------------------------------
+wifi*.conf
+*_credentials.yaml
+*_secrets.yaml
+cctv_config.*
+cctv_credentials.*
+urllib-rtsp*
+onvif_*
+*.rtsp
+*.stream
+dvr_*
+
+# --- School network and infrastructure detail ---------------------------
+# SH-NET-018, SH-PRIV-004, SH-PRIV-020, SH-GIT-011, SH-GIT-012
+network_topology.*
+vlan_config.*
+topology/
+network/
+ip_ranges.*
+*_subnet.*
+pfSense*
+opnsense*
+
+# --- Building and site detail ------------------------------------------
+# Floor plans and layouts may be sensitive even without personal data.
+floorplans/
+floor_plans/
+layouts/
+site_survey_raw/
+*.dxf
+*.dwg
+
+# --- Robot and device configuration -------------------------------------
+robot_config.local.*
+device_config.local.*
+*.calib.local.*
+aruco_map.local.*
+
+# --- Sensor data — must never be committed ------------------------------
+# SH-CCTV-006, SH-PRIV-006: no real student footage in this repository.
+data/raw/
+data/video/
+data/frames/
+data/cctv/
+data/snapshots/
+*.mp4
+*.avi
+*.mkv
+*.h264
+*.h265
+*.mjpeg
+*.jpg
+*.jpeg
+*.png
+*.bmp
+*.tiff
+
+# --- Maps and models ---------------------------------------------------
+maps/*.pgm
+maps/*.png
+maps/*.yaml
+maps/*.json
+*.bag
+*.db3
+*.mcap
+
+# --- Runtime and logs --------------------------------------------------
+logs/
+*.log
+runtime/
+*.pid
+
+# --- Python (if code is added later) -----------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- Tooling -----------------------------------------------------------
+.vscode/
+.idea/
+node_modules/
+
+# --- 🔴 CREDENTIAL-BEARING SCRIPT — never commit -------------------------
+# start_opencode_server.sh contains a hardcoded plaintext password and binds a
+# server to 0.0.0.0. It is unrelated to SHANA. The credential must be rotated
+# by its owner. See docs/shana/safety/security.md.
+start_opencode_server.sh
