@@ -76,7 +76,7 @@ These are unknown rather than blocked. They need investigation, not permission.
 | 24 | 🔴 **Build the simulation proof of concept** that ADR-011 already mandates | [`../testing/future_pilot_plan.md`](../testing/future_pilot_plan.md) |
 | 25 | **Write the route survey protocol** so it is ready to execute | [`../infrastructure/school_route_survey.md`](../infrastructure/school_route_survey.md) |
 | 26 | **Finalise the technical assessment request** for IT, CCTV, and lift contacts | [`../administration/technical_assessment_request.md`](../administration/technical_assessment_request.md) |
-| 27 | **Verify the schema YAML parses** — it has never been checked | [`../../data/schemas/`](../../data/schemas/) |
+| 27 | **Verify the schema YAML parses** — it has never been checked | [`../../../data/schemas/`](../../../data/schemas/) |
 | 28 | 🔴 **Rotate the exposed credential** and gitignore `start_opencode_server.sh` | [`../overview/current_project_state.md`](../overview/current_project_state.md) |
 
 ⚠️ **Item 24 is the highest-value unblocked task.** It is the only route to

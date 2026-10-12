@@ -15,7 +15,7 @@ read from a command, not recalled.
 
 | Check | Command | Result |
 |---|---|---|
-| Repository root | `git rev-parse --show-toplevel` | `/Users/roopalisingh/Documents/Default Project` |
+| Repository root | `git rev-parse --show-toplevel` | *(local path — omitted; verify with the command)* |
 | Branch | `git branch --show-current` | `main` |
 | Commits | `git log --oneline` | 🔴 **none — "No commits yet on main"** |
 | Remotes | `git remote -v` | 🔴 **empty — 0 remotes** |

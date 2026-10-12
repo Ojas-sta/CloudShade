@@ -14,7 +14,7 @@ This document constitutes the definitive engineering analysis and feasibility ev
 
 ### 1.1 Verified Repository State Audit
 
-A comprehensive filesystem and repository census was conducted on the codebase at `/Users/roopalisingh/Documents/Default Project`. All factual claims regarding current project artifacts were verified by direct inspection:
+A comprehensive filesystem and repository census was conducted on this repository. All factual claims regarding current project artifacts were verified by direct inspection:
 
 | Metric / Check | Verified State | Audit Evidence / Command | Classification |
 |---|---|---|---|
@@ -38,7 +38,7 @@ A comprehensive filesystem and repository census was conducted on the codebase a
 
 ## 2. Core System Architecture & The Non-Negotiable Safety Boundary
 
-The system comprises two distinct architectural components operating in an asymmetric hierarchy governed by formal Architecture Decision Records ([ADR-014](file:///Users/roopalisingh/Documents/Default%20Project/docs/architecture/architecture_decisions/ADR-014-cloudlight-never-controls-robot-motion.md) and [ADR-015](file:///Users/roopalisingh/Documents/Default%20Project/docs/architecture/architecture_decisions/ADR-015-single-integration-repository-not-three.md)):
+The system comprises two distinct architectural components operating in an asymmetric hierarchy governed by formal Architecture Decision Records ([ADR-014](../architecture/architecture_decisions/ADR-014-cloudlight-never-controls-robot-motion.md) and [ADR-015](../architecture/architecture_decisions/ADR-015-single-integration-repository-not-three.md)):
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
@@ -169,7 +169,7 @@ Unlike projects that conceal discrepancies, this integration audit conducted a c
 | Conflict ID | Severity | Description | Safety Implication & Resolution Path |
 |---|---|---|---|
 | **CONF-01** | 🔴 High | Isolated Integration Specs | CloudLight and SHANA authors drafted independent integration contracts without cross-collaboration. Unification required under `interface_contracts.md`. |
-| **CONF-02** | 🔴 High | Delivery State Collapse (`PAUSED` defect) | CloudLight's display vocabulary lacked the `PAUSED` state, collapsing all active states into `IN_PROGRESS` ("On the way"). This meant an operator-halted robot would mislead teachers. Resolved via [ADR-016](file:///Users/roopalisingh/Documents/Default%20Project/docs/architecture/architecture_decisions/ADR-016-single-sourced-delivery-state-vocabulary.md) single-source enum. |
+| **CONF-02** | 🔴 High | Delivery State Collapse (`PAUSED` defect) | CloudLight's display vocabulary lacked the `PAUSED` state, collapsing all active states into `IN_PROGRESS` ("On the way"). This meant an operator-halted robot would mislead teachers. Resolved via [ADR-016](../architecture/architecture_decisions/ADR-016-single-sourced-delivery-state-vocabulary.md) single-source enum. |
 | **CONF-03** | 🟠 Medium | Broken Internal Links | 6 markdown links pointed to renamed or shifted documents across subsystem boundaries. Explicit mapping established. |
 | **CONF-04** | 🔴 High | Citations to Non-Existent ADRs | Documentation referenced `ADR-004`, `ADR-005`, and `ADR-006` in SHANA which do not exist as physical files. Required reconciliation. |
 | **CONF-05** | 🟠 Medium | Missing Architecture Spec | `docs/architecture/delivery_state_machine.md` cited in requirements was absent from disk. |

@@ -48,7 +48,7 @@ Verified by command inspection. Full evidence:
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│  ONE REPOSITORY  —  /Users/roopalisingh/Documents/Default Project│
+│  ONE REPOSITORY  —  <repo root>                              │
 │                                                                  │
 │  ├── docs/shana/**         Agent 1   (SHANA)                     │
 │  ├── docs/cloudlight/**    Agent 2   (CloudLight)                │
