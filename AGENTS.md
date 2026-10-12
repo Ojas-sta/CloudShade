@@ -35,8 +35,9 @@ The two governing boundary rules are **accepted decisions, not preferences**:
 
 🔴 **The single most important fact about this repository, stated once so it
 cannot be misread later: there is no source code.** 0 implementation files, 0
-tests, 0 builds, 0 CI, 0 remotes. Everything in `docs/` is research, design and
-questions. **Nothing here is operational, demonstrable, or deployable.**
+tests, 0 builds, 0 CI. Everything in `docs/` is research, design and questions.
+**Nothing here is operational, demonstrable, or deployable.** ⚠️ Git has since
+been set up — that changed the workflow, **not** the software.
 
 ---
 
@@ -117,15 +118,22 @@ must be consulted — is
 
 ## D. Git boundaries
 
-🔴 **Do not push, publish, add remotes, change branch protection, or force-push
-without explicit authorisation from the repository owner.**
+🔴 **Do not add remotes, change branch protection, publish tags, or merge a
+dependent PR before its base without explicit owner authorisation.**
+
+✅ **Pushing feature branches and opening PRs is now expected, not exceptional.**
+See [`docs/integration/AGENT_BRANCH_AND_PR_WORKFLOW.md`](docs/integration/AGENT_BRANCH_AND_PR_WORKFLOW.md).
 
 | Rule | Detail |
 |---|---|
-| No remote | The repository currently has **0 remotes**. Creating one is an owner decision, not an agent decision |
+| Remote | ✅ **1** — `origin` → `Ojas-sta/CloudShade`, **public**, authorised by the owner 2026-10-11 |
+| Protected branches | `main`, `SHANA_main`, `CloudLight_Main` — 🔴 all require a PR + **1 approving review** |
 | Local commits | Expected and encouraged |
-| Pushing | Owner-authorised only |
-| Force-push to a shared branch | Never without informing every affected reviewer |
+| Pushing a feature branch | ✅ Allowed |
+| 🔴 **Pushing to a lane or `main`** | **Refused by GitHub.** PR only |
+| Force-push | 🔴 Refused by protection on all 3 branches |
+| Deleting a branch | 🔴 Refused by protection |
+| Removing protection | Owner only |
 | History rewriting | Never. **A decision without a recorded reversal condition becomes a decision nobody dares revisit** — that applies to Git history too |
 | Destructive cleanup | `git reset --hard`, `git clean -fd`, `git checkout .` are **not** routine cleanup. Use them only to discard *your own* work, and only after confirming nothing else is in the tree |
 | Never discard others' work | If the tree has changes you did not make, leave them and say so |
@@ -138,19 +146,29 @@ Full procedure: [`docs/integration/GIT_AND_AGENT_WORKFLOW_SPEC.md`](docs/integra
 
 🔴 **Correct a common misreading.** There is **one repository** containing both
 subsystems' documentation. There is **no** SHANA repository and **no**
-CloudLight repository. There are **0 remotes** and, at the time of writing,
-**no PR-hosting platform configured**.
+CloudLight repository. ⚠️ **As of 2026-10-11 there is one public remote with
+three protected branches, and one worktree per agent** — so the two subsystems
+no longer collide, but they are still **one repository, not three**.
 
 | Fact | Value | Verified by |
 |---|---|---|
 | Repository root | this directory | `git rev-parse --show-toplevel` |
-| Branches | `main` only | `git branch -a` |
-| Remotes | **0** | `git remote -v` |
-| Worktrees | 1 (the root) | `git worktree list` |
+| Branches | `main`, `SHANA_main`, `CloudLight_Main` | `git branch -a` |
+| Remotes | **1** — `Ojas-sta/CloudShade`, **public** | `git remote -v` |
+| Remote branches | **3**, all protected | `git ls-remote --heads origin` |
+| Worktrees | **3** — one per agent, plus the root | `git worktree list` |
 | Subsystem repositories | **none exist** | filesystem inspection |
-| CI / hosting | **none configured** | no `.github/workflows/`, no remote |
+| CI / hosting | hosting ✅ · CI **none** | no `.github/workflows/` |
+| Branch protection | ✅ 1 approving review, all 3 branches | `gh api .../branches/{b}/protection` |
 | Source code | **0 files** | filesystem scan for `.py .js .ts .tsx .go .c .cpp .java .rs` |
 | Tests | **0** | no test directory anywhere |
+
+⚠️ **Updated 2026-10-11:** the owner has since authorised a remote and per-agent
+worktrees. There is still **one** repository — 🔴 **not three** — but the two
+subsystems now have **separate long-lived branches and separate working
+directories**, so they no longer collide. See
+[`ADR-015`](docs/architecture/architecture_decisions/ADR-015-single-integration-repository-not-three.md)
+and [`docs/integration/AGENT_BRANCH_AND_PR_WORKFLOW.md`](docs/integration/AGENT_BRANCH_AND_PR_WORKFLOW.md).
 
 **Therefore:** the "three agents, separate repositories, cross-repository PRs"
 model does **not** match reality. Agent 3 has documented what *is* true in

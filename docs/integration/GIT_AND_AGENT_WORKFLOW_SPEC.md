@@ -65,8 +65,12 @@ Verified by command inspection. Full evidence:
 |---|---|---|
 | Repositories | **1** | `git rev-parse --show-toplevel` |
 | Branches | `main` only | `git branch -a` |
-| Remotes | **0** | `git remote -v` |
-| CI / hosting | **none** | no `.github/workflows/`, no remote |
+| Remotes | **1** — `origin` → `Ojas-sta/CloudShade` | `git remote -v` |
+| Remote branches | **3** — `main`, `SHANA_main`, `CloudLight_Main` | `git ls-remote --heads origin` |
+| Visibility | `PUBLIC` | `gh repo view --json visibility` |
+| Worktrees | **3** | `git worktree list` |
+| Branch protection | **all 3 protected** — 1 review, admins enforced, no force-push, no deletion | `gh api .../branches/{b}/protection` |
+| CI / hosting | hosting ✅ · CI still **none** | no `.github/workflows/` |
 | Source code | **0 files** | filesystem scan |
 | Tests | **0** | no test directory |
 | Commits | **1** (`3a01fa9`, the Phase A baseline) | `git log --oneline` |
@@ -109,10 +113,16 @@ the physical or safety consequence wins.** See §8.
 | **Agent 2** | Stage, commit and branch **within `docs/cloudlight/**`, `questionnaires/*CLOUDLIGHT*`** | Same |
 | **Agent 3** | Commit within `docs/integration/**`, `docs/exhibition/**`, `docs/architecture/**`, `AGENTS.md`; coordinate merges | Edit `docs/shana/**` or `docs/cloudlight/**` substantively without a request |
 
-**Everyone:** 🔴 **no push, no remote creation, no tag publication, no force-push,
-no history rewrite, without explicit owner authorisation.** This is not a
-technical limit — the repository owner has not granted it, and Phase A did not
-request it.
+**Everyone:** 🔴 **`main`, `SHANA_main` and `CloudLight_Main` are protected.** A
+direct push is refused by GitHub. Changes reach them only via a PR carrying
+one approving review.
+
+🔴 **Still owner-authorised, and not enforced by Git:** tag publication, remote
+creation, force-push, deletion, and changing branch protection itself.
+
+⚠️ **The owner granted the remote on 2026-10-11.** Phase A predates that; its
+"0 remotes" finding remains a correct record of that moment. See
+[`AGENT_BRANCH_AND_PR_WORKFLOW.md`](AGENT_BRANCH_AND_PR_WORKFLOW.md).
 
 ### 3.2 If separate repositories are ever created
 
@@ -222,8 +232,13 @@ none should be added until CI exists.
 
 ### 6.1 Availability
 
-🔴 **`BLOCKED`.** No remote, no hosting platform, therefore no PR can be opened,
-reviewed or merged today. See §12.
+✅ **`IMPLEMENTED`.** The remote is `Ojas-sta/CloudShade` (public). PRs can be
+opened against `SHANA_main`, `CloudLight_Main` or `main`, and all three are
+protected so a PR plus one approving review is required.
+
+🔴 **Status checks remain `NONE`** — there is no CI and nothing to check, so
+the review *is* the gate. See
+[`AGENT_BRANCH_AND_PR_WORKFLOW.md`](AGENT_BRANCH_AND_PR_WORKFLOW.md).
 
 `SPECIFIED` — the following applies the moment a platform exists.
 
@@ -426,7 +441,7 @@ code is theatre.
 | 5 | Run subsystem checks | the owner | ⛔ none exist |
 | 6 | Review the change | the other owner | ⛔ no PR facility |
 | 7 | Resolve feedback | the owner | ⚠️ via handoff |
-| 8 | Merge dependencies **in order** | the owner | ⛔ no remote |
+| 8 | Merge dependencies **in order** | the owner | ✅ PR + 1 approval |
 | 9 | **Update the integration repo** | Agent 3 | ✅ |
 | 10 | Run cross-project tests | both | ⛔ no code |
 | 11 | Update shared documentation | Agent 3 | ✅ |
@@ -467,8 +482,9 @@ code is theatre.
 
 | # | Blocker | Blocks | Owner | Severity |
 |---|---|---|---|---|
-| 1 | **No remote** | push, PR, review, merge, stacked PR | Repository owner | 🔴 High |
-| 2 | **No hosting platform** | PR templates, branch protection, reviewers | Repository owner | 🔴 High |
+| 1 | ~~No remote~~ | — | — | ✅ **RESOLVED 2026-10-11** |
+| 2 | ~~No hosting~~ | — | — | ✅ **RESOLVED 2026-10-11** — PRs and protection live |
+| 13 | **No CI** → no status checks; review is the only gate | automated verification | Owner, once code exists | 🟠 Medium |
 | 3 | **No second subsystem repo** | cross-repository PR model | — (topology is ADR-015) | ⚠️ Structural |
 | 4 | **0 source files** | every automated check | Agent 1 / Agent 2, post-gate | 🔴 High |
 | 5 | **0 tests** | every test claim | Agent 1 / Agent 2, post-gate | 🔴 High |
@@ -507,9 +523,9 @@ it and ask.
 | 5 | Checks specified **without claiming unconfigured ones exist** | ✅ `VERIFIED` |
 | 6 | Merge authority and safety rules stated | ✅ `IMPLEMENTED` (document) |
 | 7 | Every blocker named with an owner | ✅ `IMPLEMENTED` |
-| 8 | 🔴 Remotes created so PRs work | ⛔ `BLOCKED` — owner decision |
+| 8 | ✅ Remotes created so PRs work | ✅ `IMPLEMENTED` |
 | 9 | 🔴 CI configured | ⛔ `BLOCKED` — no code to check |
-| 10 | 🔴 Branch protection enabled | ⛔ `BLOCKED` — no hosting |
+| 10 | ✅ Branch protection enabled | ✅ `IMPLEMENTED` — 1 review on all 3 branches |
 | 11 | Agent 1 reviewed and acknowledged this spec | ⛔ `PENDING` — request issued |
 | 12 | Agent 2 reviewed and acknowledged this spec | ⛔ `PENDING` — request issued |
 

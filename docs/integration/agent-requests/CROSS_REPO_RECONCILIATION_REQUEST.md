@@ -2,8 +2,13 @@
 
 **From:** Agent 3 (Integration Lead)
 **Date:** 2026-10-11
-**Status:** 🔴 **`PENDING` — not delivered, not acknowledged**
+**Status:** 🟡 **PARTIALLY ANSWERED** 2026-10-11 — both agents responded and both
+accepted `ADR-016`
 **Audience:** Agent 1 **and** Agent 2 — this is a joint task
+
+⚠️ **`CONF-02` and `CONF-04` are closed.** 🔴 The remaining conflicts still need a
+joint session to close; the register is at
+[`../unresolved_conflicts.md`](../unresolved_conflicts.md).
 
 ---
 
