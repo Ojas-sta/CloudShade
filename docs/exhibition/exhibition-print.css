@@ -1,0 +1,126 @@
+@page {
+  margin: 0.32in;
+  size: A4 portrait;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 7.9pt;
+  line-height: 1.26;
+  color: #1a1a1a;
+  margin: 0;
+  padding: 0;
+}
+
+#title-block-header {
+  display: none;
+}
+
+h1 {
+  font-size: 11.5pt;
+  text-align: center;
+  color: #0b2545;
+  margin-top: 0;
+  margin-bottom: 3px;
+  border-bottom: 1.5px solid #0b2545;
+  padding-bottom: 2px;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+}
+
+h2 {
+  font-size: 8.9pt;
+  color: #134074;
+  margin-top: 4px;
+  margin-bottom: 2px;
+  border-bottom: 1px solid #c9d6df;
+  padding-bottom: 1px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+h3 {
+  font-size: 8.2pt;
+  color: #1d2d44;
+  margin-top: 3px;
+  margin-bottom: 1px;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 2.5px;
+  text-align: justify;
+}
+
+ol, ul {
+  margin-top: 0;
+  margin-bottom: 2.5px;
+  padding-left: 15px;
+}
+
+li {
+  margin-bottom: 1px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #d0d7de;
+  margin: 3px 0;
+}
+
+strong {
+  color: #0b2545;
+}
+
+code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-size: 7.2pt;
+  background-color: #f0f3f6;
+  color: #093c71;
+  padding: 1px 3px;
+  border-radius: 2px;
+  border: 1px solid #dce2e6;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2px;
+  margin-bottom: 3px;
+  font-size: 7.2pt;
+}
+
+th, td {
+  border: 1px solid #cbd5e1;
+  padding: 1.8px 4px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+th {
+  background-color: #f1f5f9;
+  color: #0b2545;
+  font-weight: bold;
+}
+
+tr:nth-child(even) td {
+  background-color: #f8fafc;
+}
+
+blockquote {
+  border-left: 2.5px solid #0b2545;
+  background-color: #f1f5f9;
+  margin: 2px 0;
+  padding: 2.5px 6px;
+  font-size: 7.3pt;
+  color: #1e293b;
+}
+
+blockquote p {
+  margin: 0;
+  line-height: 1.22;
+}

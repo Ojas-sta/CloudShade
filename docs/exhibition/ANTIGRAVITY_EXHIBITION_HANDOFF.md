@@ -235,7 +235,7 @@ that built a stair-climbing robot has not.
 ### The present state
 
 > *"No system has been built. No robot has been operated. No school permission
-> has been obtained. Approximately ≈1,000 questions have been asked and none has
+> has been obtained. Approximately 1,000 questions have been asked and none has
 > been answered. Twenty gates are defined and none has been passed."*
 
 ### The next step
@@ -374,7 +374,7 @@ own work. 🔴 **Disclosing it demonstrates exactly the rigour being claimed.**
 
 > *This is a feasibility study, not a delivered system. No software has been
 > written, no robot operated, and no school infrastructure accessed.
-> Approximately ≈1,000 structured questions have been asked and none has been
+> Approximately 1,000 structured questions have been asked and none has been
 > answered; twenty formal go/no-go gates are defined and none has been passed;
 > sixty-seven risks are registered and none retired. Every capability described
 > is proposed rather than demonstrated. An integration review conducted on this

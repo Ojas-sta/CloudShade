@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10.2" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Exhibition_Submission</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="exhibition-print.css" />
+</head>
+<body>
+<h1
+id="school-science-innovation-exhibition-project-submission-form">School
+Science &amp; Innovation Exhibition — Project Submission Form</h1>
+<hr />
+<h2 id="part-a-project-identification-classification">Part A: Project
+Identification &amp; Classification</h2>
+<ol type="1">
+<li><strong>Project Title:</strong><br />
+<strong>CloudLight &amp; SHANA: A Grounded Feasibility Study for a
+School-Local Information Platform and Autonomous Single-Floor Quadruped
+Delivery Subsystem</strong> <code>[SPECIFIED]</code></li>
+<li><strong>Subsystems:</strong>
+<ul>
+<li><strong>CloudLight:</strong> School-local digital platform
+(classroom schedules, substitutions, authorized resource retrieval)
+<code>[SPECIFIED]</code><br />
+</li>
+<li><strong>SHANA:</strong> School Autonomous Notification &amp; Assist
+(single-floor physical delivery on school-owned Unitree Go2 EDU)
+<code>[SPECIFIED]</code></li>
+</ul></li>
+<li><strong>Project Category:</strong> Engineering &amp; Systems
+Architecture / Autonomous Robotics Feasibility Study
+<code>[RESEARCHED]</code></li>
+<li><strong>Current Implementation Status:</strong>
+<code>DESIGN_ONLY</code> — Formal Pre-Implementation Feasibility Study
+<code>[RESEARCHED]</code></li>
+<li><strong>Verified Codebase Inventory:</strong> <strong>0 Source
+Files</strong> · <strong>0 Tests Executed</strong> · <strong>0 CI
+Pipelines</strong> · <strong>0 Deployments</strong> · <strong>0 Robots
+Operated</strong> <code>[RESEARCHED]</code></li>
+</ol>
+<hr />
+<h2 id="part-b-project-specification-engineering-feasibility">Part B:
+Project Specification &amp; Engineering Feasibility</h2>
+<h3 id="problem-statement-researched">1. Problem Statement
+<code>[RESEARCHED]</code></h3>
+<p>Academic institutions operate on fragmented operational data
+dispersed across disconnected media: static daily timetables, morning
+substitution notices, distributed lesson materials, and immediate
+classroom notifications. Concurrently, transporting physical items
+between campus departments—such as laboratory supplies, administrative
+files, and emergency classroom equipment—relies entirely on manual
+courier transit by faculty and staff. Crucially, the institutional cost,
+delay, and workload impact of these routine interruptions have
+<strong>not yet been formally measured</strong> <code>[UNKNOWN]</code>.
+This project addresses this systemic operational fragmentation through
+rigorous pre-implementation engineering and risk analysis, establishing
+verified physical constraints before writing code.</p>
+<h3 id="innovative-system-architecture-safety-boundary-specified">2.
+Innovative System Architecture &amp; Safety Boundary
+<code>[SPECIFIED]</code></h3>
+<p>The architecture separates digital information services from robotic
+actuation across an absolute, asymmetric safety boundary governed by
+formal decision record <strong>ADR-014</strong>
+<code>[RESEARCHED]</code>: - <strong>Asymmetric One-Way Request
+Path:</strong> CloudLight acts purely as an informational requester
+(<code>delivery_id</code>, pickup room, destination room, payload type).
+It possesses <strong>zero interface, API, or RPC path to command robot
+locomotion, path coordinates, velocities, or joint torques</strong>
+<code>[SPECIFIED]</code>. - <strong>Independent Robotic
+Autonomy:</strong> SHANA evaluates requests via a deterministic onboard
+safety validator and retains unilateral authority to reject, pause, or
+abort tasks. Crucially, <strong>CloudLight operates with full
+availability when SHANA is powered off or offline</strong>; robot faults
+never degrade classroom displays (Journey 8) <code>[SPECIFIED]</code>. -
+<strong>Privacy as an Absolute Constraint:</strong> The design strictly
+excludes facial recognition, biometric student tracking, misconduct
+surveillance, and raw video offloading; camera feeds are processed
+strictly for local spatial obstacle avoidance <code>[SPECIFIED]</code>.
+Recipient handover is human-assisted as the robot has no manipulator arm
+<code>[RESEARCHED]</code>.</p>
+<h3
+id="the-technical-turning-point-sourced-feasibility-rigour-researched">3.
+The Technical Turning Point &amp; Sourced Feasibility Rigour
+<code>[RESEARCHED]</code></h3>
+<p>Rather than assuming omnidirectional navigation, static analysis of
+the Unitree Go2 SDK message definitions (<code>IMUState.msg</code>)
+revealed that the robot reports exactly <strong>5 IMU fields</strong>:
+orientation, angular velocity, linear acceleration, roll-pitch-yaw, and
+temperature <code>[RESEARCHED]</code>. <strong>With zero altimeter,
+pressure, or barometer data, the quadruped cannot sense which floor of a
+building it is on</strong> <code>[RESEARCHED]</code>. Combined with a
+manufacturer-documented 160 mm obstacle step ceiling
+<code>[RESEARCHED]</code>, the removal of stair-gait APIs at firmware
+V1.1.6 <code>[RESEARCHED]</code>, and the legal prohibition of
+unsanctioned lift controller splicing <code>[RESEARCHED]</code>, the
+team formally <strong>scoped the robotics subsystem strictly to
+single-floor horizontal transit</strong> <code>[SPECIFIED]</code>.
+Furthermore, an internal integration self-audit uncovered <strong>10
+cross-project conflicts</strong> (including defect CONF-02 where paused
+states collapsed into “on the way”), 6 broken links, and 3 missing ADR
+citations, recording them openly rather than concealing them
+<code>[RESEARCHED]</code>.</p>
+<hr />
+<h2 id="part-c-verified-feasibility-audit-governance-matrix">Part C:
+Verified Feasibility Audit &amp; Governance Matrix</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Governance Axis</th>
+<th>Verified Count</th>
+<th>Repository Source &amp; Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Sourced Research Entries</strong></td>
+<td><strong>106 entries</strong></td>
+<td>68 SHANA entries (<code>source_register.md</code>) + 38 CloudLight
+entries (<code>sources.md</code>) <code>[RESEARCHED]</code></td>
+</tr>
+<tr>
+<td><strong>Structured Institutional Questions</strong></td>
+<td><strong>986 asked (0 answered)</strong></td>
+<td>576 CloudLight questions + 410 SHANA / 434 questionnaire items; none
+answered <code>[RESEARCHED]</code></td>
+</tr>
+<tr>
+<td><strong>Formal Go/No-Go Gates</strong></td>
+<td><strong>20 gates (0 passed)</strong></td>
+<td>9 platform gates + 11 robotics gates; zero gates cleared
+<code>[RESEARCHED]</code></td>
+</tr>
+<tr>
+<td><strong>Registered System Risks</strong></td>
+<td><strong>68 registered (0 retired)</strong></td>
+<td>46 CloudLight risks + 22 SHANA risks; all active, none retired
+<code>[RESEARCHED]</code></td>
+</tr>
+<tr>
+<td><strong>Administrative Permissions Sought</strong></td>
+<td><strong>104 sought (0 granted)</strong></td>
+<td>Cross-project permission checklist; all status
+<code>NOT REQUESTED</code> <code>[RESEARCHED]</code></td>
+</tr>
+<tr>
+<td><strong>System Requirements Specified</strong></td>
+<td><strong>186 requirements (0 agreed)</strong></td>
+<td>Platform and robotics requirements; none formally signed off
+<code>[SPECIFIED]</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="part-d-limitations-statement-proportionate-next-step">Part D:
+Limitations Statement &amp; Proportionate Next Step</h2>
+<blockquote>
+<p><strong>Verbatim Statement of Limitations:</strong><br />
+<em>This work is a feasibility study. No system has been built, no robot
+has been operated, and no school infrastructure has been accessed.
+Approximately 1,000 structured questions have been asked and none has
+yet been answered. Twenty formal go/no-go gates are defined and none has
+been passed. Every capability described is proposed, not demonstrated.
+The research is grounded in manufacturer documentation and source-code
+analysis, with access limitations and unresolved contradictions recorded
+rather than concealed.</em> <code>[RESEARCHED]</code></p>
+</blockquote>
+<p><strong>The Proportionate Next Step:</strong><br />
+No code should be written and no hardware operated until institutional
+clearance is established. The remaining blockers are institutional
+rather than technical: approximately <strong>25 minutes of School
+Leadership (Principal) consultation</strong> and <strong>40 minutes of
+Campus IT consultation</strong> are required to review the 14 critical
+gating criteria and determine whether a simulated physics test
+(<code>unitree_mujoco</code>) may proceed <code>[RESEARCHED]</code>.</p>
+</body>
+</html>
