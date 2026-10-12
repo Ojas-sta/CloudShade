@@ -100,6 +100,13 @@ logs/
 runtime/
 *.pid
 
+# --- Untracked build tooling ---------------------------------------------
+# scripts/build_master_workbook.py generated the master workbook. Owner
+# decision 2026-10-12: commit the workbook artefact, not the generator.
+# 🔴 The workbook is therefore a binary with NO reproducible source in this
+# repository. Recorded in docs/exhibition/workbook_provenance.md.
+scripts/
+
 # --- Python (if code is added later) -----------------------------------
 __pycache__/
 *.py[cod]
