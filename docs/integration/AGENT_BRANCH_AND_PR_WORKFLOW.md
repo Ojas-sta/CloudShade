@@ -22,8 +22,45 @@
 | PRs | ⛔ impossible | ✅ **available and required** |
 
 ⚠️ **Consequence: neither agent can push directly to `main`, `SHANA_main` or
-`CloudLight_Main`.** All three require a PR and one approving review. That is
-deliberate — it is the gate this document exists to operate.
+`CloudLight_Main`.** All three require a PR. That is deliberate — it is the
+gate this document exists to operate.
+
+### 🔴 Single-approver constraint — why the review count is 0
+
+**Required approving reviews are set to `0`, not `1`, and this is deliberate.**
+
+| Fact | Value |
+|---|---|
+| Accounts with write access | **1** — `Ojas-sta` |
+| PR author (every PR, all agents) | **`Ojas-sta`** — all agents push through one `gh` auth |
+| GitHub rule | 🔴 **An author can never approve their own PR** |
+
+⚠️ With a required count of 1, **no PR in this repository could ever be
+merged.** The gate would be unsatisfiable, not strict. The protection was
+originally set to 1 and deadlocked immediately.
+
+| Requirement | Value | Effect |
+|---|---|---|
+| 🔴 Require a pull request | **ON** | 🔴 **No direct pushes. Ever.** This is the real gate |
+| Required approving reviews | **0** | You review the diff yourself, then merge |
+| Enforce for admins | **ON** | 🔴 The owner is bound too |
+| Force-push | **blocked** | |
+| Delete branch | **blocked** | |
+
+### ⚠️ If you want genuine cross-review
+
+🔴 **It requires a second GitHub account** with write access. Options:
+
+1. **Add a collaborator** — `gh api -X PUT repos/Ojas-sta/CloudShade/collaborators/<username> -f permission=push`
+   Then set `required_approving_review_count` back to `1`.
+2. **CODEOWNERS** — nominate a reviewer in `.github/CODEOWNERS` and require
+   code-owner review. ⚠️ **Same self-approval problem** unless a second account
+   exists.
+3. **Local review** — you read the diff before merging. 🔴 **This is what is
+   happening now**, and it is weaker than an independent reviewer.
+
+⚠️ **Be honest about which one you have.** A single-person review is a *useful
+discipline*, not an *independent check*. The docs should not imply otherwise.
 
 ---
 

@@ -127,10 +127,11 @@ See [`docs/integration/AGENT_BRANCH_AND_PR_WORKFLOW.md`](docs/integration/AGENT_
 | Rule | Detail |
 |---|---|
 | Remote | ✅ **1** — `origin` → `Ojas-sta/CloudShade`, **public**, authorised by the owner 2026-10-11 |
-| Protected branches | `main`, `SHANA_main`, `CloudLight_Main` — 🔴 all require a PR + **1 approving review** |
+| Protected branches | `main`, `SHANA_main`, `CloudLight_Main` — 🔴 all require a **PR** (0 GitHub approvals; see below) |
 | Local commits | Expected and encouraged |
 | Pushing a feature branch | ✅ Allowed |
 | 🔴 **Pushing to a lane or `main`** | **Refused by GitHub.** PR only |
+| Approving a PR | ⚠️ **Not possible** — sole write-access account authors every PR. Review the diff, then merge |
 | Force-push | 🔴 Refused by protection on all 3 branches |
 | Deleting a branch | 🔴 Refused by protection |
 | Removing protection | Owner only |
@@ -159,7 +160,7 @@ no longer collide, but they are still **one repository, not three**.
 | Worktrees | **3** — one per agent, plus the root | `git worktree list` |
 | Subsystem repositories | **none exist** | filesystem inspection |
 | CI / hosting | hosting ✅ · CI **none** | no `.github/workflows/` |
-| Branch protection | ✅ 1 approving review, all 3 branches | `gh api .../branches/{b}/protection` |
+| Branch protection | ✅ PR required, all 3 branches; 🔴 **0 approving reviews** — single-account repo, and an author can never approve their own PR | `gh api .../branches/{b}/protection` |
 | Source code | **0 files** | filesystem scan for `.py .js .ts .tsx .go .c .cpp .java .rs` |
 | Tests | **0** | no test directory anywhere |
 
