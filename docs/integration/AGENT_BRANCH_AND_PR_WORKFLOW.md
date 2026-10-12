@@ -272,9 +272,74 @@ git merge origin/SHANA_main        # into a feature branch, never your lane
 | 🔴 Edit their files | Never. Use `agent-requests/` |
 
 ⚠️ **A lane that is far behind is a real risk** — CloudLight could build
-against a SHANA state machine that has since changed. 🔴 **Mitigation: both
-agents should rebase on their lane at the start of a task**, and `main` should
-be merged into both lanes periodically by Agent 3.
+against a SHANA state machine that has since changed.
+
+---
+
+## 8a. 🔴 Lane synchronisation policy — BATCH, at task start
+
+**Owner decision, 2026-10-12.**
+
+### The rule
+
+🔴 **Lanes are NOT synced after every merge to `main`.**
+
+| | |
+|---|---|
+| ❌ **Not this** | Agent 3 opens a sync PR after every merge, per lane |
+| ✅ **This** | An agent brings `main` into their **feature branch** at the start of a task |
+
+### Why
+
+`docs/integration/**` and `AGENTS.md` are **Agent 3's**. 🔴 **Almost every
+integration change makes both lanes stale.** Per-merge syncing would mean:
+
+- a sync PR per merge per lane — pure noise, ~2 per integration change
+- PR review load spent on mechanical fast-forwards
+- 🔴 **and it would still not be current by the time it merged**, so the
+  staleness window never actually closes
+
+⚠️ **Batching puts current content where it is load-bearing** — inside the
+branch where the agent is actually writing.
+
+### 🔴 The mechanism — no sync PR required
+
+⚠️ **A protected lane means a sync would need a PR. It does not need to be
+synced at all.** Merge `main` into the **feature branch** instead:
+
+```bash
+cd ~/Documents/SHANA_main          # or ~/Documents/CloudLight_Main
+
+# 1. Branch off your lane (NOT main)
+git checkout -b docs/shana-my-task
+
+# 2. Bring current main into the FEATURE branch — not the lane
+git fetch origin
+git merge origin/main              # merge conflicts resolved HERE, by you
+
+# 3. Work, commit, push the feature branch
+git push -u origin docs/shana-my-task
+
+# 4. PR into your lane
+gh pr create --base SHANA_main --head docs/shana-my-task --title "…" --body "…"
+```
+
+🔴 **Never `git checkout main` and never merge `main` into your lane.**
+The lane is a landing zone, not a base to keep current.
+
+### What this means
+
+| | |
+|---|---|
+| 🔴 A lane may be many merges behind | **Expected. Not a defect.** Never treat lane content as current |
+| 🔴 Is a sync PR ever needed? | **Only** when divergence is material — e.g. a safety rule changed, or an interface in the agent's scope moved. Agent 3 opens those on request |
+| Lane → `main` | Agent 3, when the lane is coherent. That PR is a real review, not a fast-forward |
+
+### 🔴 Cost accepted
+
+⚠️ **The safety consequence is real:** an agent who skips step 2 will build on
+stale rules — including the rules governing how to open a PR. ⚠️ **If an agent
+cannot say what the current rules are, it has not synced.**
 
 ---
 
@@ -342,12 +407,36 @@ gate is at the remote.
 
 ---
 
-## 13. Quick reference
+## 13. 🔴 Task-start checklist — every time
+
+⚠️ **Do this before writing anything, not after.**
+
+| # | Step | Why |
+|---|---|---|
+| 1 | `git fetch origin` | See current state |
+| 2 | `git checkout -b <type>/<scope>-<subject> SHANA_main` | 🔴 **Branch off your lane, never `main`** |
+| 3 | `git merge origin/main` | 🔴 **Batch sync — §8a.** Brings current rules into your work |
+| 4 | Read the rules **as they now are** | ⚠️ `AGENTS.md`, the workflow spec, your request docs |
+| 5 | Work. Stage **only your own paths** | Ownership, `AGENTS.md` §C.1 |
+| 6 | Commit with an `AGENTS.md` §Q status label | Evidence discipline |
+| 7 | `git push -u origin <branch>` | Feature branches are unprotected |
+| 8 | `gh pr create --base SHANA_main --head <branch>` | Into **your lane** |
+| 9 | 🔴 Stack dependent PRs base-on-base, merge base-first | §6 |
+
+⚠️ **Step 3 is the one agents skip**, and it is the one that matters. 🔴 Without
+it you are working from rules that may have been superseded — including the
+rule for opening the PR you are about to open.
+
+---
+
+## 14. Quick reference
 
 ```bash
 # Agent 1
 cd ~/Documents/SHANA_main
-git checkout -b docs/shana-my-change && git push -u origin HEAD
+git checkout -b docs/shana-my-change SHANA_main
+git fetch origin && git merge origin/main      # batch sync
+git push -u origin HEAD
 gh pr create --base SHANA_main --head docs/shana-my-change --title "…" --body "…"
 
 # Agent 2
