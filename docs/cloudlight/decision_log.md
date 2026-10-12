@@ -56,7 +56,7 @@ tested or verified. Where a control is described, it is a plan.
 
 ### D-003 — CloudLight never controls robot motors
 **State: DECIDED** · **Date:** 2026-10-11
-⚠️ Inherited from SHANA ADR-001. Not a CloudLight decision — a SHANA safety
+⚠️ Inherited from SHANA's decision-log entry `D-005` — indexed as ADR-001, **ADR file now written**. Not a CloudLight decision — a SHANA safety
 constraint that CloudLight inherits wholesale.
 
 **Reasoning.** A low-level command path existing anywhere in the chain, even
@@ -326,6 +326,44 @@ and index entries are deleted when the source is removed.
 
 ---
 
+### D-027 — No self-updating device ships until signed update infrastructure exists
+
+**State: DECIDED**
+
+**Date:** 2026-10-11
+
+**Decision:** 🔴 **A CloudLight client or kiosk does not fetch and apply its own
+updates during the first release or the pilot.** Updates are applied by the
+school's IT process: the signed artefact is delivered and verified through a
+controlled channel, and the device does not reach out for code on its own.
+
+**Reasoning:** D-025 already requires signed artefacts. This decides what
+happens **before** that signing infrastructure exists. An update path without a
+verified signature is the vulnerability, not a gap to be closed later.
+
+⚠️ **This is a scope reduction, not a security control.** It removes remote code
+execution as a class from the pilot. In exchange, updates are slower and manual —
+a deliberate trade of convenience for attack surface.
+
+**Rules:**
+- No client-side auto-download-and-apply before signing exists.
+- Every artefact applied during the pilot is still integrity-verified before it runs.
+- If the signing infrastructure is not ready, **updates are frozen for the pilot**
+  rather than run unsigned. 🟡 A stale device is an inconvenience; an unsigned
+  update on an untrusted LAN is a fleet-wide compromise.
+
+**Consequences:** the pilot ships a frozen version. Rollback is a re-push of a
+known-good artefact, which §10 already treats as available.
+
+**Reversal condition:** signature verification and key custody are implemented
+and tested end to end on real hardware — `CL-OTA-005` answered **and** a signing
+pipeline demonstrated — at which point self-updating may be reconsidered.
+
+**Related:** `CL-OTA-005` (P0), `CL-OTA-009`, `CL-OTA-021`, §4 of
+[`ota_updates.md`](ota_updates.md).
+
+---
+
 ## 3. Decisions still open
 
 ### D-101 — Where does the backend physically run?
@@ -466,7 +504,7 @@ share. See `risk_register.md` R-28, `CL-NAS-011`, `CL-NAS-012`.
 date; the cost of a wrong one is a teacher's standing on a wall. See D-008.
 
 ### X-10 CloudLight controlling the robot
-⛔ **Rejected permanently.** Inherited from SHANA ADR-001. Not revisable within
+⛔ **Rejected permanently.** Inherited from SHANA's ADR-001 (`D-005`). Not revisable within
 CloudLight. See D-003.
 
 ### X-11 Coupling the timetable to robot availability

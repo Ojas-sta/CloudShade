@@ -691,7 +691,7 @@ is specified in full. It is the clearest possible demonstration of §1.
 nothing downstream has a person to attribute the action to.
 
 ⚠️ **Step 2 is never interpreted by a model** — `../architecture/architecture_decisions/`,
-**ADR-001**: no AI model may reach the robot. **Step 4 is where that becomes
+**SHANA `D-005`** (no AI model may reach the robot; indexed as ADR-001). **Step 4 is where that becomes
 real:** a check that depends on a model is a check that can be wrong. A model may
 help a teacher *write* a request; a model may never decide whether that request is
 authorised. ⛔ **Step 5 is not optional:** without an idempotency key
@@ -822,7 +822,7 @@ project) · `INTERNAL` (this repository). **Access date for all external sources
 | 4 | **Session Management Cheat Sheet — OWASP** | `https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html` | OFFICIAL-OPEN | §9 — `httpOnly`, `Secure`, `SameSite`; ⛔ no session identifier in the URL; ⛔ none in `localStorage`; session ID rotation on authentication; server-side invalidation on logout and privilege change; idle and absolute timeout as distinct controls |
 | 5 | **Web Authentication API: An Introduction — W3C TAG** | `https://www.w3.org/2021/03/bringing-passwordless-login-with-webauthn.html` | GOVERNMENT-STANDARD | §4 — WebAuthn passkeys are **origin-bound, phishing-resistant, and the private key never leaves the authenticator** |
 | 6 | **Access Control Cheat Sheet — OWASP** | `https://cheatsheetseries.owasp.org/cheatsheets/Access_Control_Cheat_Sheet.html` | OFFICIAL-OPEN | §11 — least privilege, separation of duties, deny by default, and **access control decisions made server-side on every request**, not once at sign-in |
-| 7 | **`../architecture/architecture.md`** and **`../architecture/architecture_decisions/`** | *(this repository)* | INTERNAL | §13 — the local application server; the AI/deterministic boundary; **ADR-001: no AI model may reach the robot** |
+| 7 | **`../shana/architecture/architecture.md`** and **`../architecture/architecture_decisions/`** | *(this repository)* | INTERNAL | §13 — the local application server; the AI/deterministic boundary; **ADR-001: no AI model may reach the robot** |
 | 8 | **`./network_and_hosting.md`** | *(this repository)* | INTERNAL | §12 — a school LAN is not trusted merely because it is internal; TLS even on the LAN; certificate expiry as a simultaneous school-wide failure; offline-capability vs patchability |
 | 9 | **`./classroom_dashboard.md`** | *(this repository)* | INTERNAL | §5, §8 — the display is **read-only and unauthenticated by design**; `CL-DASH-001` log in at the display; accidental child touch during a lesson; `CL-UX-008` age of youngest student touching displays |
 | 10 | **`./shana_integration.md`** | *(this repository)* | INTERNAL | §13 — SHANA-side ownership boundary; high-level requests only; **safety never transfers to CloudLight** |

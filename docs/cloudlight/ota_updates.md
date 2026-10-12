@@ -128,6 +128,28 @@ check is theatre.
 
 ---
 
+## 3.1 🔴 Pilot constraint — no self-updating before signing exists
+
+⚠️ Agent 3 asked whether update signing belongs in first-release scope. **CloudLight's
+position: signing is a precondition for *self-updating*, and self-updating is out
+of first-release scope.**
+
+| | First release / pilot |
+|---|---|
+| Self-download and auto-apply | ⛔ **No.** Decision `D-027` |
+| Who applies updates | School IT, through a controlled channel |
+| Integrity of what is applied | 🔴 **Every artefact is verified before it runs** |
+| If signing infrastructure is not ready | ⛔ **Updates are frozen for the pilot.** Running unsigned is not the fallback |
+
+⚠️ **A frozen device is an inconvenience. An unsigned update on an untrusted LAN
+is a fleet-wide compromise** (§3). The pilot chooses the inconvenience.
+
+This narrows §10's "pin previous version" control: with no self-update path there
+is no silent fleet drift to re-pin, so `CL-OTA-021` drops from 🟡 to 🟢 for the
+pilot. It returns to 🟡 the moment self-updating is enabled.
+
+---
+
 ## 4. Signed releases and key custody
 
 ### 4.1 The roles
@@ -651,7 +673,7 @@ repository). **Access date for all external sources: 2026-10-11.**
 | 3 | **`./network_and_hosting.md`** | *(this repository)* | INTERNAL | §3, §9, §12, §13 — a school LAN is not trusted merely because it is internal; **certificate expiry as a simultaneous school-wide failure**; §7.3 offline-capability vs patchability; §9.5 UPS and power-cut behaviour; §9.6 "a backup that has never been restored is not a backup" |
 | 4 | **`./shana_integration.md`** | *(this repository)* | INTERNAL | §2.1 — SHANA-side ownership boundary; **safety never transfers to CloudLight**; CloudLight operates fully when SHANA is offline |
 | 5 | **`./classroom_dashboard.md`** | *(this repository)* | INTERNAL | §8.1 — **silent partial failure is indistinguishable from "nothing is scheduled"**, which on a wall in front of children is a confident falsehood; the read-only, unauthenticated display property |
-| 6 | **`../architecture/architecture.md`** and **`../architecture/architecture_decisions/`** | *(this repository)* | INTERNAL | §2 — the AI/deterministic boundary; **ADR-001: no AI model may reach the robot**, which is why channel 6 carries a different risk class from the rest |
+| 6 | **`../shana/architecture/architecture.md`** and **`../architecture/architecture_decisions/`** | *(this repository)* | INTERNAL | §2 — the AI/deterministic boundary; **ADR-001: no AI model may reach the robot**, which is why channel 6 carries a different risk class from the rest |
 | 7 | **`../../questionnaires/Additional_CloudLight_Questionnaire.md`** | *(this repository)* | INTERNAL | Every `CL-OTA-*` identifier in §16, plus `CL-SEC-013`, `CL-REACT-010`, `CL-REACT-019`, `CL-GIT-018`, `CL-OPS-016`, `CL-OPS-018`, `CL-OPS-020`, `CL-ADMIN-004`, `CL-ADMIN-019`, `CL-ADMIN-020`, with priority, respondent, evidence requirement and `UNANSWERED` status |
 
 ⚠️ **Note on Windows platform sources.** §10 discusses kiosk elevation, scheduled

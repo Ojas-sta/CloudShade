@@ -18,7 +18,7 @@ proposed design and a list of questions, not a description of a running system.
 | ❓ **UNKNOWN** | No evidence found. Not assumed in either direction. Open questions are cross-referenced to the `CL-*` gates |
 | ⛔ **NOT RECOMMENDED WITHOUT APPROVAL** | A design we will not implement without an explicit, recorded school decision |
 
-**Companion documents:** [`../architecture/data_flow.md`](../architecture/data_flow.md)
+**Companion documents:** [`../shana/architecture/data_flow.md`](../shana/architecture/data_flow.md)
 · `docs/architecture/delivery_state_machine.md` (SHANA delivery state machine)
 · [`../../questionnaires/Additional_CloudLight_Questionnaire.md`](../../questionnaires/Additional_CloudLight_Questionnaire.md)
 — the last of which holds every open gate referenced here.

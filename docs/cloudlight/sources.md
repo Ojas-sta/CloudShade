@@ -219,12 +219,12 @@ source at all** and appear in §4.
 | # | Document | Location | Class | What it supports |
 |---|---|---|---|---|
 | 79 | **Additional CloudLight Questionnaire** | `../../questionnaires/Additional_CloudLight_Questionnaire.md` | INTERNAL | **Every `CL-*` identifier cited in every CloudLight document**, with priority, respondent, dependency, evidence requirement and status |
-| 80 | **School network** | `../infrastructure/school_network.md` | INTERNAL | ⛔ **The prohibition on probing school infrastructure** — the reason every network fact in this project is a question rather than a finding; also the robot link on `192.168.123.0/24` |
-| 81 | **Risk register** | `../safety/risk_register.md` | INTERNAL | The `L × S` rating convention (🔴 High 15–25, 🟠 Medium 8–14, 🟡 Low 1–7) and the status vocabulary used across CloudLight documents |
-| 82 | **Student privacy** | `../safety/student_privacy.md` | INTERNAL | The no-identification invariant; no per-student activity tracking; no raw video retention — the basis of constraint C10 |
+| 80 | **School network** | `../shana/infrastructure/school_network.md` | INTERNAL | ⛔ **The prohibition on probing school infrastructure** — the reason every network fact in this project is a question rather than a finding; also the robot link on `192.168.123.0/24` |
+| 81 | **Risk register** | `../shana/safety/risk_register.md` | INTERNAL | The `L × S` rating convention (🔴 High 15–25, 🟠 Medium 8–14, 🟡 Low 1–7) and the status vocabulary used across CloudLight documents |
+| 82 | **Student privacy** | `../shana/safety/student_privacy.md` | INTERNAL | The no-identification invariant; no per-student activity tracking; no raw video retention — the basis of constraint C10 |
 | 83 | **Repository root script** | `start_opencode_server.sh` + `.gitignore` | INTERNAL | ✅ **VERIFIED:** the script holds a hardcoded plaintext password and binds `0.0.0.0`; it **is** listed in `.gitignore` and so is not committed. Basis for constraint C5 |
-| 84 | **Architecture** | `../architecture/architecture.md` | INTERNAL | Evidence-label conventions; the local application server; the AI/deterministic boundary |
-| 85 | **Architecture decisions** | `../architecture/architecture_decisions/` | INTERNAL | **ADR-001: no AI model may reach the robot** — the basis of FR-AI-04 and constraint C3 |
+| 84 | **Architecture** | `../shana/architecture/architecture.md` | INTERNAL | Evidence-label conventions; the local application server; the AI/deterministic boundary |
+| 85 | **Architecture decisions** | `docs/architecture/architecture_decisions/` (ADR-013–016) and `docs/shana/architecture/architecture_decisions/` (ADR-001–012) | INTERNAL | **SHANA [ADR-001](../shana/architecture/architecture_decisions/ADR-001-no-ai-reaches-the-robot.md) (`D-005`) — no AI model may reach the robot** — the basis of FR-AI-04 and constraint C3 |
 | 86 | **SHANA sources** | `../references/sources.md` | INTERNAL | ⚠️ **Not merged into this file.** Referenced where a CloudLight claim depends on robot-side documentation |
 
 ---

@@ -105,28 +105,83 @@ normal outcome, not an error condition, and CloudLight must display it as such.
 
 ## 4. Request contract (proposed, unagreed)
 
+⚠️ **`DESIGN_ONLY`. Not agreed by SHANA. Never validated.** See
+[`api_contracts.md`](architecture/api_contracts.md) §2 for the
+recorded divergence between the two independently drafted proposals.
+
 A request carries the minimum needed for SHANA to make its own decision:
 
 | Field | Purpose | Notes |
 |---|---|---|
-| `request_id` | Client-generated unique identifier | Also the **idempotency key** |
-| `idempotency_key` | Deduplicates retries of the same intent | Must survive a network retry |
-| `origin` | Source location | Must be a location SHANA recognises |
-| `destination` | Target location | Must be a location SHANA recognises |
-| `item_category` | Class of item, not contents | SHANA applies its own item policy |
-| `requested_by` | Teacher identity reference | Not credentials; not a secret |
+| `delivery_id` | Client-generated unique identifier | 🔴 **Aligned to SHANA's field name**, not `request_id` — see R11 below |
+| `idempotency_key` | Deduplicates retries of the same intent | 🔴 **NOT PRESENT IN SHANA'S SCHEMA.** Open gap |
+| `origin_id` | Source location | SHANA's name; a location SHANA recognises |
+| `destination_id` | Target location | Never free text — by design on both sides |
+| `item_category` | Class of item, not contents | 🔴 **Weight is deliberately NOT transmitted** — see below |
+| `requested_by` | 🔴 **Role ID only** (e.g. `teacher`) | Not credentials; not a secret; **not an identity reference** |
 | `requested_window` | Earliest / latest acceptable | SHANA may refuse outside its operating hours |
 | `schema_version` | Version of this message | Enables graceful degradation |
 
-⚠️ **Deliberately absent:** payload dimensions, weights, motor parameters, route
-hints, speed preferences, "priority" that could override safety, and any field
+### 4.1 🔴 Item weight — conflict recorded, not resolved
+
+| CloudLight's original position | SHANA's schema |
+|---|---|
+| Weight **forbidden**: *"payload dimensions, weights"* | `item_weight_kg` is **required** |
+
+⚠️ **Both positions are defensible and this is not CloudLight's to settle.**
+SHANA's is the safer physical position — a robot attempting to carry an item it
+cannot lift is a hazard, and only the robot should know its own limits. CloudLight's
+is the cleaner boundary — a teacher must not be able to influence a physical
+parameter.
+
+**CloudLight's position:** 🔴 **category only on the wire**, with SHANA applying
+its own payload policy from onboard sensing and its own data. If SHANA requires a
+weight field, CloudLight will supply a **category-derived conservative bound, not a
+teacher-entered figure**.
+
+🔴 **Requires both owners.** Recorded as `IC-03` in
+`docs/integration/unresolved_conflicts.md`. Unresolved.
+
+### 4.2 `requested_by` — role ID accepted
+
+⚠️ **CloudLight accepts Agent 3's recommendation: transmit a role ID, not an
+identity reference.** A role ID (`teacher`) carries no personal data, whereas a
+directory object ID is a personal identifier travelling to a second system for no
+operational benefit. This is consistent with SHANA's own `prohibited_fields`, which
+bars *"any student or staff identifier beyond the requesting role id"*.
+
+### 4.3 What is deliberately absent
+
+Motor parameters · route hints · speed preferences · any "priority" that could
+override safety · teacher-entered weight · any free-text destination · any field
 that would let a caller influence SHANA's navigation.
 
 **The request is persisted before transmission.** If SHANA never receives it, the
 record still exists. If SHANA receives it and CloudLight crashes, reconciliation
-recovers the state. The alternative — send-then-record — loses requests
-silently, and a lost request in a delivery workflow is a failed delivery nobody
-notices.
+recovers the state. Send-then-record loses requests silently, and a lost request
+in a delivery workflow is a failed delivery nobody notices.
+
+---
+
+## 4.4 🔴 API shape — divergence is larger than a base path
+
+⚠️ **Agent 3 framed this as `/v1` vs `/api/v1`. That framing is too small.**
+
+| | CloudLight drafted | SHANA drafted |
+|---|---|---|
+| Style | REST (`POST /v1/deliveries`) | JSON-RPC-style messages (`task.assign`, `status.en_route`) |
+| Addressable resource | A delivery object with a URL | No URL; a task handle plus a status stream |
+| Status delivery | Polling `GET .../{id}` | Published `status.*` messages |
+
+⚠️ **No base path reconciles these.** They are two different interaction models.
+
+**CloudLight's position:** 🔴 **REST over HTTP/JSON, with `status.*` names
+reused verbatim as the `status` enum values.** This keeps SHANA's vocabulary —
+the part ADR-016 protects — while letting CloudLight use ordinary HTTP. SHANA
+would implement a thin REST adapter over its existing state machine.
+
+⚠️ **Requires both owners.** SHANA may reasonably prefer its message model
+outright. Recorded as `IC-05`. **Unresolved.**
 
 ---
 
@@ -137,12 +192,30 @@ retrying after a timeout must **not** produce two robot tasks.
 
 Rules:
 
-1. The client generates a `request_id` before the first transmission attempt.
-2. Retries of the same intent reuse the same `request_id`.
-3. SHANA treats a repeated `request_id` as the same request, returns the
+1. The client generates a **`delivery_id`** before the first transmission
+   attempt.
+2. Retries of the same intent reuse the same `delivery_id`.
+3. SHANA treats a repeated `delivery_id` as the same request, returns the
    existing state, and **does not create a second task**.
 4. CloudLight reconciles on startup: any request in `SENT` with no terminal
-   state is re-queried by `request_id` rather than re-sent as a new request.
+   state is re-queried by `delivery_id` rather than re-sent as a new request.
+
+### 5.1 🔴 Identifier decision — one identifier, not two
+
+⚠️ An earlier draft carried **both** `request_id` and `idempotency_key`. That
+gives one intent two identities and invites exactly the desynchronisation that
+causes duplicate tasks.
+
+**CloudLight's position:** 🔴 **one identifier, `delivery_id`, which doubles as
+the idempotency key.** This also reconciles the field-name divergence with SHANA,
+whose schema already uses `delivery_id`.
+
+🔴 **`delivery_id` must be a non-sequential opaque identifier (UUIDv4/v7).** A
+guessable sequential ID is not a safe idempotency key: it leaks delivery volume
+and lets one caller address another's task.
+
+⚠️ Requires SHANA's confirmation that its `delivery_id` is already treated as an
+idempotency key. Recorded as `IC-04`. **Unresolved.**
 
 ⚠️ **Two physical tasks from one tap is a physical safety event, not a data
 bug** — a second robot moving through a corridor carrying an item nobody asked
@@ -151,32 +224,111 @@ for. Idempotency is treated as a P0 control, not an optimisation
 
 ---
 
-## 6. Status vocabulary
+## 6. Status vocabulary — a declared projection of SHANA's state machine
 
-CloudLight displays only these states. It must never infer a state it was not
-told.
+🔴 **SHANA owns the state machine.** CloudLight does not define a parallel
+vocabulary. CloudLight holds only a **read-only projection**: a mapping from
+SHANA's reported states to display strings, defined in
+[`ADR-016`](../architecture/architecture_decisions/ADR-016-single-sourced-delivery-state-vocabulary.md).
 
-| State | Meaning | Display to teacher |
-|---|---|---|
-| `REQUESTED` | Created, not yet acknowledged by SHANA | "Requesting…" |
-| `ACCEPTED` | SHANA accepted it | "Accepted" |
-| `QUEUED` | Accepted but not yet started | "Queued" |
-| `IN_PROGRESS` | Robot is executing | "On the way" |
-| `AWAITING_CONFIRMATION` | Arrived; waiting for the recipient | "Waiting for confirmation" |
-| `DELIVERED` | Recipient confirmed | "Delivered" |
-| `FAILED` | Operational failure | Failure reason, in plain language |
-| `CANCELLED` | Cancelled | "Cancelled" |
-| `REJECTED` | SHANA declined | Reason, in plain language |
-| `UNKNOWN` | Status could not be determined | "Status unavailable" + age of last known |
+**Source of truth:** SHANA's `delivery.schema.yaml` state enum and
+`docs/shana/architecture/task_state_machine.md`.
 
-⚠️ **`AWAITING_CONFIRMATION` must not be shown as delivered.** Per SHANA's
-existing design principle, completion requires explicit recipient confirmation
-and is **never** inferred from arrival. An item left in a closed room is not a
-delivery. See `docs/architecture/delivery_state_machine.md`.
+### 6.1 🔴 Correction — `PAUSED` was missing
 
-⚠️ **`UNKNOWN` must never be rendered as `IN_PROGRESS`.** When the link drops,
-the last known state is shown **with its age**. A stale "On the way" causes a
-teacher to wait for a robot that already stopped.
+⚠️ **This section previously mapped every executing state to `IN_PROGRESS`,
+displayed as "On the way". SHANA can enter `PAUSED` from *any* state.** The
+result was that a robot halted by an operator, holding position and waiting for
+a human, would have been shown to a teacher as **"On the way"** — a false
+statement about the physical state of a machine carrying an item through a
+school, and a direct contradiction of this document's own invariant 8.
+
+That defect is now corrected. `PAUSED` is explicit.
+
+### 6.2 The projection — keyed to messages SHANA actually publishes
+
+🔴 **This maps the messages SHANA really publishes**, taken from SHANA's
+`task_state_machine.md` §State → published message mapping. An earlier draft of
+this section invented display states (`MOVING_TO_PICKUP`, `IN_TRANSIT`) that
+**SHANA never emits** — precisely the kind of parallel vocabulary ADR-016
+forbids. Corrected.
+
+| SHANA publishes | Covers state(s) | CloudLight shows | Teacher must act? |
+|---|---|---|---|
+| *(nothing yet)* | not yet sent | "Requesting…" | No |
+| `status.assigned` | `QUEUED` · `VALIDATING` · `READY` | "Accepted — preparing" | No |
+| `status.en_route` | `NAVIGATING_TO_PICKUP` · `NAVIGATING_TO_DESTINATION` | "On the move" | No |
+| `status.awaiting_loading` | `AWAITING_LOADING_CONFIRMATION` | "Waiting for the item to be loaded" | 🔴 **Yes — a person must load** |
+| `status.awaiting_recipient` | `AWAITING_RECIPIENT` | "At the destination — waiting for confirmation" | 🔴 **Yes — go to the robot now** |
+| `status.paused` | `PAUSED` | "Paused — a person is needed" | 🔴 **Yes — operator action** |
+| `status.blocked` | overlay on any state | "Route blocked — a person is needed" | 🔴 **Yes — operator action** |
+| `status.estop` | out-of-band, takes precedence | "Emergency stop" | 🔴 **Yes** |
+| `status.delivered` | `COMPLETED` | "Delivered" | No |
+| `status.cancelled` | `CANCELLED` | "Cancelled" | No |
+| `status.error` | `FAILED` | Failure reason in plain language | Depends on reason |
+| `status.ready` | ⚠️ **not a delivery state** | Availability indicator only | No |
+| *(no update / unrecognised)* | unknown | "Status unavailable" **+ age** | Re-request later |
+
+### 6.3 🔴 Known, accepted projection loss
+
+⚠️ **CloudLight cannot tell the pickup leg from the delivery leg.** SHANA
+publishes `status.en_route` for both `NAVIGATING_TO_PICKUP` and
+`NAVIGATING_TO_DESTINATION`, so "going to collect it" is not observable from the
+wire.
+
+**CloudLight accepts this loss.** It passes the homogeneity test: in both states
+the robot is moving and **nothing is required of the teacher**. Had the two
+different teacher obligations, CloudLight would object.
+
+⚠️ If the school later wants "going to collect it" shown, that is **SHANA's
+change to make** — SHANA would have to publish the legs separately. CloudLight
+must not infer it.
+
+### 6.4 🔴 States that must never be collapsed
+
+⚠️ **These are the states where a human must act. Merging any of them into a
+coarse "in progress" tells a teacher the opposite of the truth.** This is SHANA's
+rule set `M-1`…`M-4` applied on the CloudLight side:
+
+| Must stay distinct | Because |
+|---|---|
+| **`status.paused`** vs `status.en_route` | "Paused, a person is needed" and "on the move" demand **opposite** responses |
+| `status.awaiting_recipient` vs `status.en_route` | One means **wait**; the other means **go there now** |
+| `status.awaiting_loading` vs `status.en_route` | A person is needed at the pickup |
+| `status.estop` | Out-of-band; 🔴 takes precedence over **every** state |
+| unknown / stale vs anything live | A stale status must never be rendered as current |
+
+**Projection rule:** several SHANA states may share one display string **only if**
+the collapsed set is homogeneous with respect to *what the teacher must do*.
+`QUEUED`/`VALIDATING`/`READY` and the two travel legs pass that test. The rows
+above do not.
+
+### 6.4 `REJECTED` — unresolved
+
+🔴 **`REJECTED` has no SHANA counterpart.** SHANA's machine routes a validator
+rejection to `CANCELLED`, so today a refusal and a withdrawal are
+indistinguishable to CloudLight.
+
+⚠️ CloudLight **will not invent a terminal state SHANA cannot emit.** Until SHANA
+either adds a distinct rejection state or supplies a mapping rule, `REJECTED`
+stays in the design as `DESIGN_ONLY` and is **not** displayed. This is recorded as
+a live conflict in `docs/integration/unresolved_conflicts.md` (`CONF-02`).
+
+### 6.5 Rules
+
+1. 🔴 **Never render a state SHANA did not report.** No inference, ever.
+2. 🔴 **`UNKNOWN` and `UNAVAILABLE` are always shown with the age of the last
+   known state.** A bare stale "On the way" causes a teacher to wait for a robot
+   that already stopped.
+3. 🔴 **`AWAITING_RECIPIENT` is never shown as delivered.** Completion requires
+   explicit recipient confirmation and is never inferred from arrival. An item
+   left in a closed room is not a delivery. See SHANA's `delivery.schema.yaml`
+   validation rule.
+4. **The projection is versioned and reviewable.** It changes through the
+   interface-change procedure (`AGENTS.md` §G), never by editing one subsystem
+   silently.
+5. 🔴 **No integration may be implemented until this projection is agreed by both
+   owners.** There is nothing to build against an ambiguous contract.
 
 ---
 
@@ -214,7 +366,7 @@ pressure on SHANA to degrade safety to keep a request moving.
 
 | Aspect | Behaviour |
 |---|---|
-| CloudLight | On startup, reconcile all non-terminal requests by `request_id` |
+| CloudLight | On startup, reconcile all non-terminal requests by `delivery_id` |
 | SHANA | On restart, report the true state of in-flight tasks |
 | Orphan detection | A request with no counterpart on either side is flagged for a human, never auto-retried as new |
 
@@ -287,7 +439,7 @@ of the entire system.
 8. **CloudLight never presents an inferred or stale status as current.**
 
 ⚠️ Invariants 1–3 are inherited from SHANA's own accepted architecture
-decisions (`ADR-001`, `ADR-003`) and are **not** CloudLight's to relax.
+decisions — SHANA's [ADR-001](../shana/architecture/architecture_decisions/ADR-001-no-ai-reaches-the-robot.md) (no AI model reaches the robot) and [ADR-003](../shana/architecture/architecture_decisions/ADR-003-stairs-and-lifts-excluded.md) — and are **not** CloudLight's to relax.
 
 ---
 
@@ -335,7 +487,7 @@ Its two cross-referenced SHANA documents are cited below.
 | 1 | SHANA architecture | `docs/architecture/architecture.md` | INTERNAL | Evidence-label conventions; local-server principle; the deterministic-validator rule |
 | 2 | Delivery state machine | `docs/architecture/delivery_state_machine.md` | INTERNAL | Recipient-confirmation rule; the "last known position is not current position" principle |
 | 3 | Student privacy | `docs/safety/student_privacy.md` | INTERNAL | No-identification invariant; no raw video retention |
-| 4 | ADR-001 — No AI model may reach the robot | `docs/architecture/architecture_decisions/` | INTERNAL | Invariant 1 |
+| 4 | No AI model may reach the robot | SHANA [ADR-001](../shana/architecture/architecture_decisions/ADR-001-no-ai-reaches-the-robot.md) `D-005` |
 | 5 | School network | `docs/infrastructure/school_network.md` | INTERNAL | The robot link is a separate wired Ethernet path, not the CloudLight LAN |
 
 ⚠️ **No external vendor or robot-documentation source is cited in this document.**

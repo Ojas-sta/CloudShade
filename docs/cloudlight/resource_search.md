@@ -806,7 +806,7 @@ Three corollaries that survive every answer above:
 | 11 | **[`docs/cloudlight/resource_browser.md`](resource_browser.md)** | *(this repository)* | INTERNAL | §1 tier dependencies, §2, §3.2, §3.6, §6.3, §7.3 — the storage reality check, the mandatory read-only service account, the one-permission-model rule, extracted text as a derived copy, and the download and offline questions |
 | 12 | **[`docs/cloudlight/network_and_hosting.md`](network_and_hosting.md)** | *(this repository)* | INTERNAL | §6.3 — the index is derived and rebuildable; the database is the system of record; §9 of that document for backup, power loss and the rule that a backup with no named restorer is not a plan |
 | 13 | **[`questionnaires/Additional_CloudLight_Questionnaire.md`](../../questionnaires/Additional_CloudLight_Questionnaire.md)** | *(this repository)* | INTERNAL | Every `CL-*` identifier cited here — `CL-SEARCH-*`, `CL-NAS-*`, `CL-RES-*`, `CL-AUTH-*`, `CL-SEC-*`, `CL-AI-*` — with priority, respondent and evidence requirement. **All `UNANSWERED`** |
-| 14 | **[`docs/infrastructure/school_network.md`](../infrastructure/school_network.md)** | *(this repository)* | INTERNAL | The prohibition on probing school infrastructure; the evidence-label convention used here |
+| 14 | **[`docs/infrastructure/school_network.md`](../shana/infrastructure/school_network.md)** | *(this repository)* | INTERNAL | The prohibition on probing school infrastructure; the evidence-label convention used here |
 
 ---
 

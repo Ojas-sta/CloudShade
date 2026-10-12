@@ -479,7 +479,7 @@ would be worth less than none.
 ## 4. Risks that are SHANA's, not CloudLight's
 
 Out of scope here, named so nobody double-counts them. Full detail in
-[`../safety/risk_register.md`](../safety/risk_register.md).
+[`../shana/safety/risk_register.md`](../shana/safety/risk_register.md).
 
 | Concern | Owner | Note |
 |---|---|---|

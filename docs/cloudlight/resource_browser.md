@@ -752,7 +752,7 @@ ours to make.
 | 16 | **[`docs/cloudlight/network_and_hosting.md`](network_and_hosting.md)** | *(this repository)* | INTERNAL | §1, §7, §8 — the local-first no-internet rule; NAS-as-hosting asymmetry; the segmentation requirement; `CL-NET-*` dependencies for reaching storage |
 | 17 | **[`docs/cloudlight/resource_search.md`](resource_search.md)** | *(this repository)* | INTERNAL | §2.4, §4.1, §9.2 — tiers that avoid content extraction; permission-aware retrieval; staleness |
 | 18 | **[`questionnaires/Additional_CloudLight_Questionnaire.md`](../../questionnaires/Additional_CloudLight_Questionnaire.md)** | *(this repository)* | INTERNAL | Every `CL-*` identifier cited here — `CL-NAS-*`, `CL-RES-*`, `CL-AUTH-*`, `CL-SEC-*` — with priority, respondent and evidence requirement. **All `UNANSWERED`** |
-| 19 | **[`docs/infrastructure/school_network.md`](../infrastructure/school_network.md)** | *(this repository)* | INTERNAL | The prohibition on probing school infrastructure; the evidence-label convention used here |
+| 19 | **[`docs/infrastructure/school_network.md`](../shana/infrastructure/school_network.md)** | *(this repository)* | INTERNAL | The prohibition on probing school infrastructure; the evidence-label convention used here |
 
 ---
 

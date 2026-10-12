@@ -241,7 +241,7 @@ replacing it.
 | 🟡 **INTERNAL** | Draft timetable; unpublished substitutions; staff directory; resource folder structure and metadata; delivery request records; configuration | CloudLight DB; audit log; NAS metadata | **Any authenticated staff member**, subject to role | Drafts until superseded or a term. Delivery records per `CL-SEC-025`. Directory until staff leave | Useful across the school; disclosure would be embarrassing or operationally harmful but not, alone, damaging to a child. ⚠️ **A draft substitution is INTERNAL, not PUBLIC — this is the entire reason T14 exists** |
 | 🟠 **CONFIDENTIAL** | Staff records; salary; medical and leave information; disciplinary records; **examination papers and answer keys**; moderation notes; appraisal material; student results and behaviour notes | CloudLight DB; **the NAS**; ⛔ **the search index** | **Named individuals and roles only**, enforced by the NAS's own permissions where one exists (`CL-SEC-007`) | School policy; deletion on request where applicable (`CL-SEC-025`) | Disclosure causes real harm to a person — financial, medical, professional — or defeats the purpose of an assessment |
 | 🔴 **RESTRICTED** | Passwords and hashes; session tokens; **the update signing key**; NAS and server service credentials; AI conversation logs containing student-identifying content; full audit logs; backups holding any of the above | ⛔ **Nowhere a user can reach.** Environment or secret store at runtime; encrypted backup media | **Named systems and named people only.** Not a role — a specific credential | Secrets: **rotated, never retained.** Tokens until expiry. AI conversation logs: **shortest workable period**, then deleted or irreversibly anonymised | ⛔ **Compromise of any one is a security incident by definition.** Not "a concern" — an incident |
-| ⛔ **NEVER STORED** | Raw passwords (only a salted, costed hash); motor or actuator parameters; raw robot video; biometric data; any persistent student identifier collected for surveillance | — | — | — | ⛔ **Existence is the defect.** Per `../safety/student_privacy.md`: no student is ever identified, no raw video is retained |
+| ⛔ **NEVER STORED** | Raw passwords (only a salted, costed hash); motor or actuator parameters; raw robot video; biometric data; any persistent student identifier collected for surveillance | — | — | — | ⛔ **Existence is the defect.** Per `../shana/safety/student_privacy.md`: no student is ever identified, no raw video is retained |
 
 ### 4.1 ⚠️ Examination material is the class that breaks the others
 
@@ -357,7 +357,7 @@ its own.
 an isolated subnet, its own interface on the host. The failure mode to avoid is
 sharing a broadcast domain with the classroom LAN, where discovery succeeds and
 unicast fails — a fault that looks like a network problem and is very hard to
-diagnose. See `../infrastructure/school_network.md` and
+diagnose. See `../shana/infrastructure/school_network.md` and
 `shana_integration.md` §3.
 
 ### 7.2 Specific path restrictions
@@ -443,7 +443,7 @@ anything that would turn the log into a surveillance record.
 | **Retention must reach backups and the index** | ⚠️ A policy that prunes the live database but leaves the data in a backup and an index is **not a retention policy** | `CL-DATA-016`, `CL-DATA-020` |
 | ⚠️ **Logs about students and staff carry their own privacy obligations** | A record of who signed in, when, from which display and which resources they read is a behavioural record of identifiable people. ⚠️ **It needs its own access control and its own retention justification — logging more is not free** | `CL-OPS-011`, `CL-OPS-010` |
 | **Who may read them** | ⛔ **Not "all teaching staff."** Access to audit logs is itself a privilege, and over-broad visibility is a privacy problem in its own right | `CL-SEC-020` |
-| **Monitoring vs. surveillance** | ⛔ **No per-student activity tracking of any kind.** A classroom system recording what each child searched is a different product with different legal consequences | `../safety/student_privacy.md` |
+| **Monitoring vs. surveillance** | ⛔ **No per-student activity tracking of any kind.** A classroom system recording what each child searched is a different product with different legal consequences | `../shana/safety/student_privacy.md` |
 
 ⚠️ **`CL-SEC-020` asks whether audit information is visible to teaching staff, and
 that is as much a privacy question as a security one.** Over-broad visibility
@@ -597,7 +597,7 @@ joint test session held.**
 | **4** | ✅ **Requests persisted before transmission** | If SHANA never receives the request the record still exists. Reconciliation on restart by `request_id`, not re-send |
 | **5** | ✅ **`UNKNOWN` never renders as `IN_PROGRESS`** | A stale "On the way" causes a teacher to wait for a robot that already stopped (`CL-SEC-017`) |
 | **6** | ✅ **CloudLight operates fully when SHANA is offline** | ⛔ A robot failure must never blank a classroom screen. ⚠️ **The dependency arrow points from CloudLight to SHANA, and it is optional** |
-| **7** | ✅ **No raw robot video ever leaves the robot; no person is ever identified** | `../safety/student_privacy.md`. Inherited from SHANA's own decisions — not CloudLight's to relax |
+| **7** | ✅ **No raw robot video ever leaves the robot; no person is ever identified** | `../shana/safety/student_privacy.md`. Inherited from SHANA's own decisions — not CloudLight's to relax |
 
 ### 11.1 ⚠️ What a P0 control does and does not buy
 
@@ -605,7 +605,7 @@ joint test session held.**
 |---|---|
 | A request provably came from *this school's* CloudLight | ⛔ **That a human authorised it.** Mutual authentication proves *which system*, not *whose intent* |
 | No duplicate physical task from a replayed request | ⛔ Protection against a *fresh, valid* request made by an authenticated but misused account |
-| A bounded worst case — an unauthorised delivery request, not motion control | ⛔ Protection of the robot link itself, which is a separate segment (`../infrastructure/school_network.md`) |
+| A bounded worst case — an unauthorised delivery request, not motion control | ⛔ Protection of the robot link itself, which is a separate segment (`../shana/infrastructure/school_network.md`) |
 
 ⚠️ **Honest statement:** the second and third gaps are accepted, not solved. They
 are recorded in §13 with the compensating controls that make them tolerable at
@@ -741,10 +741,10 @@ them, and no engineering judgement substitutes for them.**
 | 8 | **Code Signing Cheat Sheet — OWASP** | `https://cheatsheetseries.owasp.org/cheatsheets/Code_Signing_Cheat_Sheet.html` | OFFICIAL-OPEN | T12, A9 — ✅ **the signature must be verified by the software consuming the artefact**, not by the distribution point; the private key is the crown jewel; key compromise means every artefact is suspect (`CL-SEC-013`) |
 | 9 | **LLM Prompt Injection Prevention Cheat Sheet — OWASP** | `https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html` | OFFICIAL-OPEN | T09, A12 — retrieved content treated as **data, not instruction**; segregating instructions from retrieved content; and OWASP's own framing that **no mitigation is complete**, which is why §13 records A12 as accepted rather than solved |
 | 10 | **Incident Response Recommendations and Considerations for Cybersecurity Risk Management: A CSF 2.0 Community Profile (NIST SP 800-61 Rev. 3)** | `https://csrc.nist.gov/pubs/sp/800/61/r3/final` | OFFICIAL-STANDARD | §10 — incident-response preparation integrated with organisational risk management, and the importance of a defined, named response capability. ✅ Published April 2025; supersedes Rev. 2 (2012) |
-| 11 | **`docs/safety/risk_register.md`** | *(this repository — `../safety/risk_register.md`)* | INTERNAL | ⚠️ **The rating convention this document follows**: `L` × `S` both 1–5; 🔴 High 15–25, 🟠 Medium 8–14, 🟡 Low 1–7; and the status vocabulary `MITIGATION PLANNED` / `OPEN — APPROVAL REQUIRED` / `OPEN — ANSWER REQUIRED` / `MONITOR` |
+| 11 | **`docs/safety/risk_register.md`** | *(this repository — `../shana/safety/risk_register.md`)* | INTERNAL | ⚠️ **The rating convention this document follows**: `L` × `S` both 1–5; 🔴 High 15–25, 🟠 Medium 8–14, 🟡 Low 1–7; and the status vocabulary `MITIGATION PLANNED` / `OPEN — APPROVAL REQUIRED` / `OPEN — ANSWER REQUIRED` / `MONITOR` |
 | 12 | **`start_opencode_server.sh`** and **`.gitignore`** | *(repository root)* | INTERNAL | T05, §5 S1 — ✅ **VERIFIED:** the repository-root script contains a hardcoded plaintext password and binds `0.0.0.0`. ⚠️ **Correction:** it *is* listed in `.gitignore`, so it is not committed; the exposure is local. No document here quotes the credential value |
-| 13 | **`docs/safety/student_privacy.md`** | *(this repository — `../safety/student_privacy.md`)* | INTERNAL | §4 ⛔ NEVER STORED row; §8.4 ⛔ no per-student activity tracking; §11 control 7 — no student is ever identified; no raw video retention |
-| 14 | **`docs/infrastructure/school_network.md`** | *(this repository — `../infrastructure/school_network.md`)* | INTERNAL | §7.1, §11 — the robot link is a **separate wired Ethernet segment** that must not share a broadcast domain with the classroom LAN; and the scan/probe prohibition that makes every network fact a question rather than a finding |
+| 13 | **`docs/safety/student_privacy.md`** | *(this repository — `../shana/safety/student_privacy.md`)* | INTERNAL | §4 ⛔ NEVER STORED row; §8.4 ⛔ no per-student activity tracking; §11 control 7 — no student is ever identified; no raw video retention |
+| 14 | **`docs/infrastructure/school_network.md`** | *(this repository — `../shana/infrastructure/school_network.md`)* | INTERNAL | §7.1, §11 — the robot link is a **separate wired Ethernet segment** that must not share a broadcast domain with the classroom LAN; and the scan/probe prohibition that makes every network fact a question rather than a finding |
 | 15 | **`docs/architecture/architecture.md`** and `architecture_decisions/` | *(this repository — `../architecture/`)* | INTERNAL | §2 B3, §11 control 3 — the no-AI-to-the-robot invariant, the deterministic-validator rule, the local-server principle |
 | 16 | **`docs/cloudlight/network_and_hosting.md`** | *(this repository — `network_and_hosting.md`)* | INTERNAL | §7 segmentation request; §9 backup and UPS; §11 the concentrated host; §12 default-deny egress. ⚠️ **Its §6.1 states the same core principle: "A school LAN must NOT be assumed trusted"** |
 | 17 | **`docs/cloudlight/shana_integration.md`** | *(this repository — `shana_integration.md`)* | INTERNAL | §11 — mutual authentication and idempotency as P0; `UNKNOWN` never rendering as `IN_PROGRESS`; the ten invariants; and the recommendation to build without SHANA and add it last |

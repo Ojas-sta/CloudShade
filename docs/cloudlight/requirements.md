@@ -82,10 +82,10 @@ would have to happen for it to become a commitment.**
 | [`security_and_privacy.md`](security_and_privacy.md) | Threat model, controls, privacy boundary |
 | [`ota_updates.md`](ota_updates.md) | Release signing, staged rollout, rollback |
 | [`shana_integration.md`](shana_integration.md) | The CloudLight/SHANA ownership boundary |
-| [`../architecture/architecture.md`](../architecture/architecture.md) | The AI/deterministic boundary; the local application server |
-| [`../safety/risk_register.md`](../safety/risk_register.md) | The `L × S` rating convention used across this repository |
-| [`../safety/student_privacy.md`](../safety/student_privacy.md) | The no-identification invariant |
-| [`../infrastructure/school_network.md`](../infrastructure/school_network.md) | The prohibition on probing school infrastructure |
+| [`../shana/architecture/architecture.md`](../shana/architecture/architecture.md) | The AI/deterministic boundary; the local application server |
+| [`../shana/safety/risk_register.md`](../shana/safety/risk_register.md) | The `L × S` rating convention used across this repository |
+| [`../shana/safety/student_privacy.md`](../shana/safety/student_privacy.md) | The no-identification invariant |
+| [`../shana/infrastructure/school_network.md`](../shana/infrastructure/school_network.md) | The prohibition on probing school infrastructure |
 | [`deployment_options.md`](deployment_options.md) | Host and client-form options; upgrade triggers; handover |
 
 ---
@@ -110,7 +110,7 @@ answer to be stated.
 | FR-DASH-07 | The system **MUST** display a distinct, non-error state when it cannot reach the host, rather than a blank screen or a browser error page | `PROPOSED` | A blank screen is indistinguishable from a broken panel; a browser error page implies the school has broken something | `CL-DASH-012`, `CL-UX-012`, `CL-SEC-021` |
 | FR-DASH-08 | The system **MUST** support operating today's lesson from cache when the host is unreachable | `PENDING ANSWER` | What must survive a full outage is a school policy decision, not a technical one — the two candidate lists differ | `CL-SEC-021`, `CL-SEC-022` |
 | FR-DASH-09 | The system **MUST** render an empty or holiday day as an explicit "no lessons today" state, not as a blank or stale timetable | `PENDING ANSWER` | Showing a normal lesson on a holiday day undermines every other correctness guarantee on the display | `CL-DASH-014`, `CL-TIME-013`, `CL-TIME-015` |
-| FR-DASH-10 | The system **MUST NOT** display student names, marks, grades or attendance | `CONFIRMED` | Fixed by the no-identification invariant in [`../safety/student_privacy.md`](../safety/student_privacy.md) | `CL-DASH-003`, `CL-DASH-002`, `CL-SEC-010` |
+| FR-DASH-10 | The system **MUST NOT** display student names, marks, grades or attendance | `CONFIRMED` | Fixed by the no-identification invariant in [`../shana/safety/student_privacy.md`](../shana/safety/student_privacy.md) | `CL-DASH-003`, `CL-DASH-002`, `CL-SEC-010` |
 | FR-DASH-11 | The system **MUST** distinguish free periods, cancelled periods and substituted periods without relying on colour | `PROPOSED` | Colour is never the sole carrier of meaning. A substitution shown only as a different colour is invisible to a colour-blind teacher and to a photocopier | `CL-UX-005`, `CL-UX-006` |
 | FR-DASH-12 | Announcements, if supported at all, **MUST** require named approval before appearing on any display | `PENDING ANSWER` | Whether announcements exist is not yet established; if they do, "who may post" is an administration decision | `CL-DASH-006`, `CL-DASH-007` |
 | FR-DASH-13 | The system **MUST** operate fully when SHANA is unreachable, showing a clear non-alarming "robot unavailable" state | `CONFIRMED` | A teacher must be able to distinguish "no robot" from "CloudLight is broken" | `CL-DASH-022`, `CL-SEC-017` |
@@ -198,7 +198,7 @@ answer to be stated.
 |---|---|---|---|---|
 | FR-AI-01 | The system **MUST NOT** call an external AI service unless the school has given written authorisation for that specific service | `CONFIRMED` | Sending school material to a third party is a data-transfer decision the school has not made | `CL-SEC-011`, `CL-BUD-006` |
 | FR-AI-02 | The system **MUST** default to fully local inference, with no outbound call in any code path, including error handlers | `CONFIRMED` | Default-off is a design property. A default-on with a kill switch is a different and weaker thing | `CL-SEC-011`, `CL-GEN-004` |
-| FR-AI-03 | The assistant **MUST** be **propose-only**: it may draft, and a human must approve before anything is published or executed | `CONFIRMED` | Fixed by the AI/deterministic boundary in [`../architecture/architecture.md`](../architecture/architecture.md) and ADR-001 | `CL-SEC-009`, `CL-SUB-003` |
+| FR-AI-03 | The assistant **MUST** be **propose-only**: it may draft, and a human must approve before anything is published or executed | `CONFIRMED` | Fixed by the AI/deterministic boundary in [`../shana/architecture/architecture.md`](../shana/architecture/ architecture.md) and SHANA `D-005` *(indexed as ADR-001)* | `CL-SEC-009`, `CL-SUB-003` |
 | FR-AI-04 | The assistant **MUST NOT** be able to reach the robot under any code path, including a tool-use or function-calling path | `CONFIRMED` | The boundary is expressed as an **absence of capability**, not as a policy. See [`shana_integration.md`](shana_integration.md) | — |
 | FR-AI-05 | Retrieved document content **MUST** be treated as **data, never as instruction** | `CONFIRMED` | Indirect prompt injection is documented as not fully mitigable; the structural defence is segregation, not filtering | `CL-SEC-009` |
 | FR-AI-06 | The system **MUST NOT** allow a school document to act as a standing instruction to the assistant | `CONFIRMED` | A "handbook" the assistant obeys is an unversioned, unreviewed instruction channel into a classroom | `CL-SEC-009` |
@@ -267,14 +267,14 @@ answer to be stated.
 
 | ID | Requirement | Class | Rationale | Depends on questionnaire |
 |---|---|---|---|---|
-| FR-SHANA-01 | CloudLight **MUST NOT** send motor, path, speed, actuator or localisation commands | `CONFIRMED` | ADR-001 and the SHANA ownership boundary. Non-negotiable and not revisable by either team | — |
+| FR-SHANA-01 | CloudLight **MUST NOT** send motor, path, speed, actuator or localisation commands | `CONFIRMED` | SHANA's [ADR-001](../shana/architecture/architecture_decisions/ADR-001-no-ai-reaches-the-robot.md) (`D-005`) and the SHANA ownership boundary. Non-negotiable and not revisable by either team | — |
 | FR-SHANA-02 | CloudLight **MUST** send high-level delivery intent only — *what*, *to where*, *by when* | `CONFIRMED` | The interface boundary is defined by what may cross it | `CL-SHANA-002` |
 | FR-SHANA-03 | SHANA **MUST** independently validate safety, and CloudLight **MUST NOT** assert or influence that validation | `CONFIRMED` | Safety ownership never transfers. CloudLight is not qualified to make this judgement | `CL-SHANA-003` |
 | FR-SHANA-04 | CloudLight **MUST** operate fully when SHANA is unreachable | `CONFIRMED` | The robot is a subsystem, not a dependency. A stalled integration must never stall a lesson | `CL-DASH-022`, `CL-SEC-017` |
 | FR-SHANA-05 | CloudLight **MUST NOT** treat an `UNKNOWN` robot status as a successful or in-progress one | `CONFIRMED` | An invented status on a classroom wall is the worst available failure | `CL-SEC-017` |
 | FR-SHANA-06 | Every delivery request **MUST** carry a unique idempotency key, and a retry **MUST NOT** create a second delivery | `PROPOSED` | A duplicated physical delivery is a real failure with a real object | `CL-SEC-016` |
 | FR-SHANA-07 | SHANA **MUST** verify the request originated from this school's CloudLight instance | `PENDING ANSWER` | Mutual authentication on a robot link is a P0 and is unresolved | `CL-SHANA-015`, `CL-SEC-016` |
-| FR-SHANA-08 | The robot link **MUST** be a network path distinct from the classroom LAN, sharing no broadcast domain | `CONFIRMED` | Sharing a broadcast domain produces a fault that looks like a network fault and is very hard to diagnose | [`../infrastructure/school_network.md`](../infrastructure/school_network.md) |
+| FR-SHANA-08 | The robot link **MUST** be a network path distinct from the classroom LAN, sharing no broadcast domain | `CONFIRMED` | Sharing a broadcast domain produces a fault that looks like a network fault and is very hard to diagnose | [`../shana/infrastructure/school_network.md`](../shana/infrastructure/school_network.md) |
 | FR-SHANA-09 | The display **MUST** show delivery status as a non-blocking element that never obscures or replaces the lesson | `PROPOSED` | A delivery widget that competes with the lesson is a design failure regardless of its correctness | `CL-SHANA-005`, `CL-DASH-004` |
 | FR-SHANA-10 | CloudLight **MUST NOT** present a delivery as complete without a status from SHANA | `CONFIRMED` | "Complete" inferred locally is a safety-adjacent falsehood | `CL-SHANA-008` |
 | FR-SHANA-11 | SHANA integration **MUST** be built last, after the core platform is demonstrated working without it | `PROPOSED` | The robot link adds a network path, an authentication problem and a failure mode to a product that has none of those yet | `CL-SHANA-*` |
@@ -402,15 +402,15 @@ answer to be stated.
 |---|---|---|---|
 | **C1** | **Local-only operation by default.** Core features do not require the public internet | [`network_and_hosting.md`](network_and_hosting.md) §7.2 | Any design where a lesson depends on an external service |
 | **C2** | **No external AI service without written authorisation**, for that specific service, from a named person | `CL-SEC-011`, `CL-GEN-004` | "We will try it and see". Not permitted |
-| **C3** | **CloudLight never controls robot motors.** No motor, path, speed, actuator or localisation command may cross the boundary | [`shana_integration.md`](shana_integration.md); ADR-001 | Any CloudLight-side safety reasoning about the robot. CloudLight is not qualified to make it |
+| **C3** | **CloudLight never controls robot motors.** No motor, path, speed, actuator or localisation command may cross the boundary | [`shana_integration.md`](shana_integration.md); CloudLight ADR-014; SHANA `D-005` *(indexed as ADR-001)* | Any CloudLight-side safety reasoning about the robot. CloudLight is not qualified to make it |
 | **C4** | **SHANA independently validates safety.** Safety ownership does not transfer | `CL-SHANA-003` | CloudLight asserting, pre-empting or inferring a safety judgement |
 | **C5** | **No secret in Git, in a URL, in a log, or in browser local storage** | `CL-SEC-006`, `CL-GIT-014` | Convenience. A secret in version control must be assumed compromised |
 | **C6** | **A school LAN is not trusted.** It is an internal network shared with student devices | [`network_and_hosting.md`](network_and_hosting.md) §6.1 | Relying on "it's internal" as a security control |
 | **C7** | **The classroom display is read-only and unauthenticated** | [`classroom_dashboard.md`](classroom_dashboard.md); `CL-SEC-001` | Any write path from a display; any session held open on a board |
 | **C8** | **Publication of timetable and substitution data requires human approval** | `CL-SUB-003`, `CL-OTA-019` | Fully automatic publication. Note this is a *constraint on publication*, not on proposal — machine drafts remain permitted |
 | **C9** | **Software and data updates use separate approval paths** | `CL-OTA-001`, `CL-OTA-019` | A single "deploy everything" pipeline |
-| **C10** | **No student-identifying data on a student-facing display or in a delivery request** | [`../safety/student_privacy.md`](../safety/student_privacy.md) | Individualised dashboards. Period |
-| **C11** | **Scanning, probing or port-scanning the school network is prohibited** | [`../infrastructure/school_network.md`](../infrastructure/school_network.md) | Resolving any network unknown by ourselves. IT checks what needs checking |
+| **C10** | **No student-identifying data on a student-facing display or in a delivery request** | [`../shana/safety/student_privacy.md`](../shana/safety/student_privacy.md) | Individualised dashboards. Period |
+| **C11** | **Scanning, probing or port-scanning the school network is prohibited** | [`../shana/infrastructure/school_network.md`](../shana/infrastructure/school_network.md) | Resolving any network unknown by ourselves. IT checks what needs checking |
 | **C12** | **The classroom smartboard is a client, never the server** | [`deployment_options.md`](deployment_options.md) §2 option (d) | Peer-hosted and board-hosted designs, which also fail on client isolation |
 
 ---
@@ -451,7 +451,7 @@ answer to be stated.
 | Must not be modelled | Why |
 |---|---|
 | A per-student record | Fixed by the no-identification invariant, C10 |
-| A student's activity or access history | Fixed by [`../safety/student_privacy.md`](../safety/student_privacy.md) |
+| A student's activity or access history | Fixed by [`../shana/safety/student_privacy.md`](../shana/safety/student_privacy.md) |
 | A second authoritative timetable copy | Two live copies diverge — `CL-TIME-001`, `CL-DATA-019` |
 | An unversioned "current timetable" with no history | Unattributable corrections — `CL-DATA-017` |
 

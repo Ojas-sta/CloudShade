@@ -681,7 +681,7 @@ files are held on the same shares and may be excluded from teacher-facing search
 the assistant** — a corpus without pupil data cannot leak it through any future feature,
 including ones not yet imagined. With `CL-SEC-010` (§11.1), these are the two
 student-data constraints this document depends on. See
-[`../safety/student_privacy.md`](../safety/student_privacy.md).
+[`../shana/safety/student_privacy.md`](../shana/safety/student_privacy.md).
 
 ---
 

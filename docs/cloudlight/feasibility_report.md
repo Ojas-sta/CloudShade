@@ -244,7 +244,7 @@ approval workflow existing at all.
 | **Publishing any timetable change** | ⛔ **Never** | **NOT_RECOMMENDED_WITHOUT_APPROVAL** |
 | **Approving a substitution** | ⛔ **Never** | **NOT_RECOMMENDED_WITHOUT_APPROVAL** |
 | **Granting permissions** | ⛔ **Never** | **NOT_RECOMMENDED_WITHOUT_APPROVAL** |
-| **Issuing any robot command** | ⛔ **Never.** Inherited from ADR-001 | **NOT_RECOMMENDED_WITHOUT_APPROVAL** |
+| **Issuing any robot command** | ⛔ **Never.** Inherited from SHANA's [ADR-001](../shana/architecture/architecture_decisions/ADR-001-no-ai-reaches-the-robot.md) (`D-005`) | **NOT_RECOMMENDED_WITHOUT_APPROVAL** |
 | Reading a photograph of a classroom board as authoritative | ⛔ **Never** | **NOT_RECOMMENDED_WITHOUT_APPROVAL** |
 
 ⚠️ **The single highest-value AI use in the timetable pipeline is confidence
@@ -423,7 +423,7 @@ with firmware flashing is a category error with safety consequences.
 |---|---|
 | SHANA's behaviour when CloudLight is unreachable is **SHANA's decision**, not CloudLight's specification | **NOT_RECOMMENDED_WITHOUT_APPROVAL** |
 | CloudLight must not create pressure on SHANA to degrade safety to keep a request moving | **NOT_RECOMMENDED_WITHOUT_APPROVAL** |
-| No AI model output may reach the robot — inherited from ADR-001 | **NOT_RECOMMENDED_WITHOUT_APPROVAL** |
+| No AI model output may reach the robot — inherited from SHANA's [ADR-001](../shana/architecture/architecture_decisions/ADR-001-no-ai-reaches-the-robot.md) (`D-005`) | **NOT_RECOMMENDED_WITHOUT_APPROVAL** |
 | A stop can never be delayed or overridden by a peer | **NOT_RECOMMENDED_WITHOUT_APPROVAL** |
 | Delivery completion requires explicit recipient confirmation, never inferred from arrival | **NOT_RECOMMENDED_WITHOUT_APPROVAL** |
 | CloudLight operates **fully** when SHANA is offline | **NOT_RECOMMENDED_WITHOUT_APPROVAL** |

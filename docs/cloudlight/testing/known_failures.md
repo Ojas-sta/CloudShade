@@ -39,7 +39,7 @@
 |---|---|
 | **What happened** | Subagents drafting CloudLight documents produced **link targets that did not exist** — paths to files that were never created, or that existed under a different name or in a different directory |
 | **Why it matters** | A fabricated cross-reference is worse than a missing one. A missing link is visible. A fabricated one *reads as verified*, and a reader following it either finds nothing or — worse — finds a *different* file and believes the link confirmed it |
-| **Example still present at time of writing** | `../architecture/architecture.md`, `../safety/risk_register.md`, `../safety/student_privacy.md`, `../infrastructure/school_network.md` and `../architecture/data_flow.md` are linked from `requirements.md`, `ai_assistant.md`, `resource_browser.md`, `resource_search.md`, `risk_register.md` and `timetable_and_substitutions.md`. ⛔ **None of those paths exists.** `docs/safety/`, `docs/infrastructure/` and `docs/cloudlight/safety/` are all absent |
+| **Example still present at time of writing** | `../shana/architecture/architecture.md`, `../shana/safety/risk_register.md`, `../shana/safety/student_privacy.md`, `../shana/infrastructure/school_network.md` and `../shana/architecture/data_flow.md` are linked from `requirements.md`, `ai_assistant.md`, `resource_browser.md`, `resource_search.md`, `risk_register.md` and `timetable_and_substitutions.md`. ⛔ **None of those paths exists.** `docs/safety/`, `docs/infrastructure/` and `docs/cloudlight/safety/` are all absent |
 | **Corrected?** | 🟡 **Partially.** These four documents correctly wrote them and they are live-correct. The pre-existing broken links **remain broken** and were deliberately **not** repaired here — those files belong to other agents working concurrently, and this agent's brief forbids modifying them |
 | **Residual risk** | ⛔ **High and live.** A broken link is invisible to every reader and to version control. It will survive indefinitely unless a link check runs in CI, and **there is no CI in this repository** |
 
@@ -101,7 +101,7 @@ this repository.**
 every document in one directory.
 
 Several CloudLight documents were drafted with SHANA-style paths —
-`../safety/risk_register.md` — implying a `docs/cloudlight/safety/` directory
+`../shana/safety/risk_register.md` — implying a `docs/cloudlight/safety/` directory
 that does not exist. This is not bad luck. **It is two incompatible layouts, one
 adopted per project, with no decision recorded about which applies to CloudLight.**
 
