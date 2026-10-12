@@ -199,7 +199,14 @@ must never claim it is implemented because a document describes it.**
 contract first, then each subsystem's implementation, then integration tests
 and documentation. The base PR must be identified, dependencies declared
 explicitly, and the stack merged in dependency order. Never force-push a shared
-branch without informing reviewers. Full procedure in the workflow spec §7.
+branch without informing reviewers. Full procedure in the workflow spec §6.
+
+🔴 **Batch sync, at task start — not after every merge.** An agent branches off
+their lane and merges `origin/main` into the **feature branch**, not into the
+lane. 🔴 A lane may be many merges behind; **that is expected, not a defect, and
+lane content must never be assumed current.** Agent 3 opens a lane-sync PR only
+when the divergence is material — a safety rule changed, or an interface in the
+agent's scope moved. Full rule: workflow spec §8a.
 
 ---
 
