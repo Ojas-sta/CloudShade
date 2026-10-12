@@ -17,14 +17,14 @@ resolve a conflict by editing another subsystem's files.
 | ID | Conflict | Severity | Owner | Status |
 |---|---|---|---|---|
 | [CONF-01](#conf-01) | Two integration documents written without sight of each other | 🔴 High | Agent 1 + Agent 2 | `REQUESTED` |
-| [CONF-02](#conf-02) | Delivery state vocabularies incompatible; `PAUSED` unrepresentable | 🔴 High | Agent 1 + Agent 2 | `REQUESTED` — ADR-016 |
-| [CONF-03](#conf-03) | 6 broken internal links across the SHANA/CloudLight boundary | 🟠 Medium | Agent 2 | `REQUESTED` — mapping supplied |
-| [CONF-04](#conf-04) | Documents cite ADRs that do not exist as files | 🔴 High | Agent 1 | `REQUESTED` |
+| [CONF-02](#conf-02) | Delivery state vocabularies incompatible; `PAUSED` unrepresentable | 🔴 High | Agent 1 + Agent 2 | ✅ **RESOLVED** 2026-10-11 — ADR-016 accepted, `status.paused` shipped (`a5952ac`, `69ab69a`) |
+| [CONF-03](#conf-03) | 6 broken internal links across the SHANA/CloudLight boundary | 🟠 Medium | Agent 2 | ✅ **RESOLVED** 2026-10-11 — 0 broken links remain |
+| [CONF-04](#conf-04) | Documents cite ADRs that do not exist as files | 🔴 High | Agent 1 | ✅ **RESOLVED** 2026-10-11 — 12 ADRs written (`a5952ac`) |
 | [CONF-05](#conf-05) | `docs/architecture/delivery_state_machine.md` does not exist anywhere | 🟠 Medium | Agent 2 | `REQUESTED` |
-| [CONF-06](#conf-06) | `request_id` vs `delivery_id` — divergent primary identifiers | 🟠 Medium | Agent 1 + Agent 2 | `REQUESTED` |
+| [CONF-06](#conf-06) | `request_id` vs `delivery_id` — divergent primary identifiers | 🟠 Medium | Agent 1 + 2 | 🟡 **DECIDED** — one identifier (`delivery_id`); 🔴 **not yet recorded in `IC-02`** |
 | [CONF-07](#conf-07) | Delivery API base path: `/v1/` vs `/api/v1/` | 🟡 Low | Agent 2 | `REQUESTED` |
-| [CONF-08](#conf-08) | SHANA's outbound `status.*` set does not match its own state machine | 🟠 Medium | Agent 1 | `REQUESTED` |
-| [CONF-09](#conf-09) | Occupancy authority unresolved (`D-031` provisional vs CloudLight as "building intelligence" owner) | 🟠 Medium | Agent 1 + Agent 2 | `REQUESTED` |
+| [CONF-08](#conf-08) | SHANA's outbound `status.*` set does not match its own state machine | 🟠 Medium | Agent 1 | ✅ **RESOLVED** 2026-10-11 — `state → status.*` table published (`a5952ac`) |
+| [CONF-09](#conf-09) | Occupancy authority unresolved (`D-031` provisional vs CloudLight as "building intelligence" owner) | 🟠 Medium | Agent 1 | ✅ **RESOLVED** — never a CloudLight input to route safety; ADR-009 (`a5952ac`) |
 | [CONF-10](#conf-10) | `requested_by` semantics differ: teacher role ID vs teacher identity reference | 🟡 Low | Agent 2 | `REQUESTED` |
 | [CONF-11](#conf-11) | `.gitignore` gap: `.obsidian/` was not ignored | 🟡 Low | Agent 3 | ✅ `RESOLVED` |
 
@@ -79,8 +79,9 @@ contracts, both authoritative-looking, neither agreed.
 
 ## CONF-02 — Delivery state vocabularies are incompatible, and `PAUSED` cannot be represented
 
-**Severity:** 🔴 High · **Owner:** Agent 1 + Agent 2 · **Status:** `REQUESTED`
-· **Proposed resolution:** [ADR-016](../architecture/architecture_decisions/ADR-016-single-sourced-delivery-state-vocabulary.md)
+**Severity:** 🔴 High · **Owner:** Agent 1 + Agent 2
+· **Status:** ✅ **`RESOLVED` 2026-10-11**
+· **Resolution:** [ADR-016] **ACCEPTED by both agents** (`a5952ac`, `69ab69a`)(../architecture/architecture_decisions/ADR-016-single-sourced-delivery-state-vocabulary.md)
 · 🔴 **This is the most safety-relevant conflict found.**
 
 ### Position A — SHANA's machine (11 states)
@@ -166,7 +167,7 @@ preserved in ADR-016's reversal condition.
 
 ## CONF-03 — Six broken internal links across the subsystem boundary
 
-**Severity:** 🟠 Medium · **Owner:** Agent 2 · **Status:** `REQUESTED`
+**Severity:** 🟠 Medium · **Owner:** Agent 2 · **Status:** ✅ **`RESOLVED` 2026-10-11**
 
 ### Finding
 
@@ -213,7 +214,7 @@ this table.
 
 ## CONF-04 — Documents cite architecture decisions that do not exist
 
-**Severity:** 🔴 High · **Owner:** Agent 1 · **Status:** `REQUESTED`
+**Severity:** 🔴 High · **Owner:** Agent 1 · **Status:** ✅ **`RESOLVED` 2026-10-11** — 12 ADRs written
 
 ### Finding
 
@@ -447,6 +448,22 @@ have been committed.
 
 🔴 Resolved in the Phase A baseline commit, as a machine-specific artefact
 exclusion. No agent-owned path was touched.
+
+---
+
+## Resolved 2026-10-11
+
+| ID | Resolution | Evidence |
+|---|---|---|
+| **CONF-02** | ADR-016 **accepted by both agents**; `status.paused` added to CloudLight's projection with rules barring collapse into "on the way" | `a5952ac`, `69ab69a` |
+| **CONF-03** | All 6 broken links remapped and verified. **0 broken links repository-wide** | `69ab69a`, `58feb3b` |
+| **CONF-04** | 12 SHANA ADRs written. Every cited ADR ID now resolves to a file | `a5952ac` |
+| **CONF-08** | `state → status.*` mapping published, barring collapse of the three human-action states | `a5952ac` |
+| **CONF-09** | Occupancy is never a CloudLight input to route safety | `a5952ac`, ADR-009 |
+
+⚠️ **Five conflicts closed. Six remain.** `CONF-01` needs a joint session;
+`CONF-05`, `CONF-06` (recording only), `CONF-07` and `CONF-10` need small owner
+decisions written into [`interface_contracts.md`](interface_contracts.md).
 
 ---
 
