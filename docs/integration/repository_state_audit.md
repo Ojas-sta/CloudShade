@@ -174,6 +174,34 @@ The *citations* are unresolvable. Tracked as `CONF-04` in
 | Source code | **0** |
 | Tests | **0** |
 
+## 8a. ⚠️ AMENDMENT — state changed after this audit
+
+🔴 **This audit is a dated record. It is not edited to reflect later events,
+because that would destroy its value.** Everything in §1–§7 was true at
+**2026-10-11, Phase A**. It is superseded in part:
+
+| Fact | Phase A recorded | **Current** | Changed by |
+|---|---|---|---|
+| Remotes | **0** | 🔴 **1** — `origin` → `Ojas-sta/CloudShade`, **public** | Owner authorisation |
+| Remote branches | none | **3** — `main`, `SHANA_main`, `CloudLight_Main` | Agent 3 |
+| Branch protection | none | ✅ **all 3** — 1 approving review, no force-push, no delete | Agent 3 |
+| Worktrees | **1** | **3** — `/SHANA_main`, `/CloudLight_Main`, root | Owner + Agent 3 |
+| Commits | 0 | **6** | Phase A–M |
+| PRs | ⛔ impossible | ✅ possible; 🔴 **none opened yet** | — |
+| 🔴 Source files | **0** | 🔴 **0** | unchanged |
+| 🔴 Tests | **0** | 🔴 **0** | unchanged |
+| 🔴 Gates passed | **0 of 20** | 🔴 **0 of 20** | unchanged |
+| 🔴 Permissions | **0 of 104** | 🔴 **0 of 104** | unchanged |
+| Broken internal links | **6** | ✅ **0** — all fixed 2026-10-11 | Agent 1, 2, 3 |
+| Cited-but-nonexistent ADRs | **3** | ✅ **0** — 12 SHANA ADRs now exist | Agent 1 |
+
+🔴 **What did not change is the important part.** Git infrastructure now exists.
+🔴 **Software does not.** A pull request mechanism is not authorisation to build.
+
+See [`AGENT_BRANCH_AND_PR_WORKFLOW.md`](AGENT_BRANCH_AND_PR_WORKFLOW.md).
+
+---
+
 ## 9. What Phase A could not do, and why
 
 | Blocker | Consequence | Owner |
