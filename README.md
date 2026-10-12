@@ -185,6 +185,30 @@ SHANA/
 
 ---
 
+## 📄 Submission documents
+
+External documents prepared outside this repository.
+
+| Document | Link |
+|---|---|
+| **Proposal Submission** (PDF) | [Open in Google Drive](https://drive.google.com/file/d/1n9PhoBO7mgqlAMJ2pdAwDV_4vIeu7T5G/view) |
+| **Complete Workbook Questionnaire** (spreadsheet) | [Open in Google Sheets](https://docs.google.com/spreadsheets/d/1RxDtV1oltacLMwPUMKvnyrnoKzwqgP_F/edit?usp=sharing&ouid=111809660408191298202&rtpof=true&sd=true) |
+
+⚠️ **These live outside Git.** They are 🔴 **not version-controlled and not
+reviewed.** 🔴 **Agent 3 has not been able to open either link** and therefore
+cannot independently confirm what they contain.
+
+**If either document makes a claim that contradicts
+[`docs/exhibition/claim_evidence_matrix.md`](docs/exhibition/claim_evidence_matrix.md),
+the matrix is authoritative** — see its Tier-1 forbidden claims.
+
+✅ **The owner states the Drive PDF and
+[`docs/exhibition/Exhibition_Submission.pdf`](docs/exhibition/Exhibition_Submission.pdf)
+are the same version.** ⚠️ That is the owner's confirmation, not an
+Agent 3 verification — the Drive link was never fetched.
+
+---
+
 ## Current state: what blocks everything
 
 Ten questions block the architecture. All are P0. None can be answered by
