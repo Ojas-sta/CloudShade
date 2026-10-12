@@ -10,7 +10,9 @@
 ## 1. The model in one paragraph
 
 Three agents share **one repository**. 🔴 There is **no** SHANA repository and
-**no** CloudLight repository, **0 remotes**, and no PR-hosting platform. See
+**no** CloudLight repository. ⚠️ **Since 2026-10-11 there is also one remote and
+three protected branches** — see
+[`AGENT_BRANCH_AND_PR_WORKFLOW.md`](AGENT_BRANCH_AND_PR_WORKFLOW.md). See
 [`ADR-015`](../architecture/architecture_decisions/ADR-015-single-integration-repository-not-three.md).
 Coordination therefore happens through **directory ownership**, **written
 requests**, and a **single shared contract** — not through branch isolation or
@@ -60,7 +62,9 @@ procedure (§5) and **both** owners' awareness — it is not Agent 1's alone.
 | Commit locally, another's paths | 🔴 **Never** | 🔴 **Never** | 🔴 **Never** |
 | **Push** | 🔴 owner authorisation | 🔴 owner authorisation | 🔴 owner authorisation |
 | **Create a remote** | 🔴 Never | 🔴 Never | 🔴 Never — owner decision |
-| **Open a PR** | 🔴 No remote exists | 🔴 No remote exists | 🔴 No remote exists |
+| **Push a feature branch** | ✅ to `origin` | ✅ to `origin` | ✅ to `origin` |
+| **Open a PR** | ✅ → `SHANA_main` | ✅ → `CloudLight_Main` | ✅ |
+| **Push to `main` / a lane** | 🔴 Protected | 🔴 Protected | 🔴 Protected — needs owner |
 | **Merge** | Owner-driven | Owner-driven | ⚠️ advises; owner merges |
 | Rewrite history / force-push | 🔴 Never | 🔴 Never | 🔴 Never |
 | Publish a decision as `Accepted` | SHANA-internal ADRs | — | Cross-project: 🔴 **only after both owners review** |
@@ -176,7 +180,7 @@ Available mechanisms:
 
 | Mechanism | Status |
 |---|---|
-| Repository-hosted issues / PRs | ⛔ No remote, no hosting |
+| Repository-hosted issues / PRs | ✅ `Ojas-sta/CloudShade` — PRs + protection live |
 | Written request in `agent-requests/` | ✅ Used — 🔴 **delivery and acknowledgement are `PENDING`** |
 | Task board entry | ✅ Used |
 | Conflict register entry | ✅ Used |
@@ -220,9 +224,12 @@ anywhere in this documentation.
 | Question | Answer |
 |---|---|
 | How many repositories? | **1** |
-| How many remotes? | **0** |
-| Can agents push? | 🔴 **No** |
-| Can agents open PRs? | 🔴 **No** |
+| How many remotes? | **1** — `Ojas-sta/CloudShade`, public |
+| Remote branches? | **3** — `main`, `SHANA_main`, `CloudLight_Main`, all protected |
+| Worktrees? | **3** — one per agent plus the integration root |
+| Can agents push feature branches? | ✅ **Yes** |
+| Can agents open PRs? | ✅ **Yes** → their own lane |
+| Can agents push to a lane or `main`? | 🔴 **No — protected** |
 | Can agents commit? | ✅ Yes, within their own paths |
 | How many conflicts are open? | **10** |
 | How many requests are outstanding? | **3**, all `PENDING` |

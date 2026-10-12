@@ -73,7 +73,7 @@ Or "none".
 Who must approve what. Or "none".
 
 ## 14. Relevant PRs / commits
-Or "NONE — no remote exists, so no PR is possible."
+Or "NONE — no PR opened yet" (verify with `gh pr list`).
 
 ## 15. Recommended next action
 One concrete, actionable step.
@@ -86,7 +86,7 @@ One concrete, actionable step.
 | ❌ Never | Why | ✅ Write instead |
 |---|---|---|
 | Invent a test result | Fabricated evidence | `"NONE — 0 tests exist"` |
-| Claim a PR was opened | No remote exists | `"NONE — no remote; PRs are impossible"` |
+| Claim a PR was opened | 🔴 Verify with `gh pr list` | `"NONE — no PR opened yet"` |
 | Claim an agent acknowledged | 🔴 **No delivery channel exists** | `"PENDING — not yet delivered"` |
 | Claim a gate passed | Gates need evidence | `"PENDING — evidence not gathered"` |
 | Describe `DESIGN_ONLY` in the present tense | 🔴 The core failure mode | `"SPECIFIED — not implemented"` |
@@ -124,8 +124,10 @@ section means:**
 | Tests written / executed | **0 / 0** |
 | Build system | **none** |
 | CI | **none** |
-| Remotes | **0** |
-| Commits | **1** (baseline, 2026-10-11) |
+| Remotes | **1** — `Ojas-sta/CloudShade`, public |
+| Remote branches | **3** — `main`, `SHANA_main`, `CloudLight_Main`, all protected |
+| Commits | **6** |
+| Open PRs | **0** |
 | Capabilities demonstrated | **0** |
 | Go/no-go gates passed | **0 of 20** |
 | Questions answered | **0 of ≈1,000** |
@@ -205,11 +207,17 @@ No agent was contacted — 🔴 **no delivery channel exists.**
 None.
 
 ## 13. Required permissions
-Repository owner: remote + hosting. School: 14 answers.
+⚠️ *At time of writing:* repository owner — remote + hosting. ⚠️ **Both granted
+2026-10-11.** School: 14 answers. 🔴 Still outstanding.
 
 ## 14. Relevant PRs / commits
-**NONE — no remote exists, so no PR is possible.**
+At time of writing: **NONE — no remote existed, so no PR was possible.**
 Local commits: `3a01fa9` (baseline).
+
+⚠️ **Superseded 2026-10-11:** the owner authorised a public remote
+(`Ojas-sta/CloudShade`), three protected branches, and a worktree per agent.
+🔴 **Still no PR has been opened.** See
+[`AGENT_BRANCH_AND_PR_WORKFLOW.md`](AGENT_BRANCH_AND_PR_WORKFLOW.md).
 
 ## 15. Recommended next action
 Deliver the three requests in `docs/integration/agent-requests/` to Agent 1 and

@@ -44,11 +44,13 @@ code, a test, a capability, or a demonstration.
 | INT-04 | Create root `AGENTS.md` | Agent 3 | ✅ `DONE` | `IMPLEMENTED_AND_TESTED` | 🔴 P0 | INT-01 | Sections A–R present; ownership, status vocabulary, done criteria defined | `AGENTS.md` | `VERIFIED` |
 | INT-05 | Create Git + cross-project workflow spec | Agent 3 | ✅ `DONE` | `IMPLEMENTED_AND_TESTED` | 🔴 P0 | INT-04 | Topology documented from inspection, not assumption | `GIT_AND_AGENT_WORKFLOW_SPEC.md` | `VERIFIED` |
 | INT-06 | Record cross-project conflicts | Agent 3 | ✅ `DONE` | `IMPLEMENTED_AND_TESTED` | 🔴 P0 | INT-05 | Each conflict has both positions quoted, an owner, evidence | `unresolved_conflicts.md` | `VERIFIED` |
-| INT-07 | Establish agent requests | Agent 3 | ⛔ `BLOCKED` | `DESIGN_ONLY` | 🔴 P0 | INT-05 | 🔴 **No delivery channel exists** | `agent-requests/*` | `NONE` |
+| INT-07 | Establish agent requests | Agent 3 | ✅ `DONE` | `IMPLEMENTED_AND_TESTED` | 🔴 P0 | INT-05 | 3 requests written; ✅ **both agents responded 2026-10-11** | `agent-requests/*` | `VERIFIED` |
 | INT-08 | Reconcile the two integration contracts | Agent 1 + 2 | 🔴 `BLOCKED` | `DESIGN_ONLY` | 🔴 P0 | INT-07, CONF-01 | One contract, both owners `ACCEPTED` | `interface_contracts.md` | `NONE` |
-| INT-09 | Establish a remote and hosting | Repository owner | 🔴 `BLOCKED` | `BLOCKED` | 🔴 P0 | owner decision | Remote exists; PRs possible | — | `NONE` |
+| INT-09 | Establish a remote and hosting | Repository owner | ✅ `DONE` | `IMPLEMENTED_AND_TESTED` | 🔴 P0 | owner decision | ✅ `Ojas-sta/CloudShade`, public, 3 branches | — | `VERIFIED` |
 | INT-10 | Configure CI | Repository owner | 🔴 `BLOCKED` | `BLOCKED` | 🟠 P2 | first code lands | 🔴 Nothing to check yet | — | `NONE` |
-| INT-11 | Enable branch protection | Repository owner | 🔴 `BLOCKED` | `BLOCKED` | 🟠 P2 | INT-09 | Required review + checks | — | `NONE` |
+| INT-11 | Enable branch protection | Repository owner | ✅ `DONE` | `IMPLEMENTED_AND_TESTED` | 🔴 P0 | INT-09 | ✅ 1 review on all 3 branches; no force-push, no delete | — | `VERIFIED` |
+| INT-14 | Per-agent worktrees and lane branches | Agent 3 | ✅ `DONE` | `IMPLEMENTED_AND_TESTED` | 🔴 P0 | INT-09 | ✅ `SHANA_main`, `CloudLight_Main`; 3 worktrees | [`AGENT_BRANCH_AND_PR_WORKFLOW.md`](AGENT_BRANCH_AND_PR_WORKFLOW.md) | `VERIFIED` |
+| INT-15 | Agent PRs reviewed and approved | Owner + Agent 3 | 🔴 `BLOCKED` | `BLOCKED` | 🔴 P0 | INT-14 | 🔴 **No PR opened yet** | — | `NONE` |
 | INT-12 | Automate the markdown link check | Agent 3 | 🔴 `BLOCKED` | `BLOCKED` | 🟡 P3 | INT-10 | 🔴 6 links broke unnoticed | — | `NONE` |
 | INT-13 | Produce the Antigravity exhibition handoff | Agent 3 | ⛔ `IN_PROGRESS` | `DESIGN_ONLY` | 🔴 P0 | INT-06 | Self-contained; evidence-bound | `../exhibition/…` | `NONE` |
 
@@ -132,11 +134,13 @@ cross-project dependencies are visible. Full detail:
 | Source files | **0** | filesystem scan |
 | Tests written / run | **0 / 0** | no test directory |
 | CI workflows | **0** | no `.github/workflows/` |
-| Remotes | **0** | `git remote -v` |
-| Commits | **1** | `git log` |
-| Open conflicts | **10** | this document |
-| Outstanding requests | **4** | `agent-requests/` |
-| 🔴 Requests acknowledged | **0** | no delivery channel |
+| Remotes | **1** — `Ojas-sta/CloudShade`, **public** | `git remote -v` |
+| Remote branches / protected | **3 / 3** | `git ls-remote --heads origin` |
+| Worktrees | **3** | `git worktree list` |
+| Commits | **6** | `git log` |
+| Open conflicts | **10** (CONF-04 now closed — ADRs written) | this document |
+| Requests written | **3** | `agent-requests/` |
+| 🔴 Requests acknowledged | ✅ **2 of 2** answered 2026-10-11 | Agent 1 `a5952ac`, Agent 2 `69ab69a` |
 | Questions asked of the school | **≈1,000** | 434 SHANA + 576 CloudLight |
 | Questions answered | **0** | questionnaire `Status` columns |
 | Permissions sought / granted | 102 / **0** | SHANA permission checklist |

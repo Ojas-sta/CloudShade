@@ -209,7 +209,7 @@ oversight.
 | # | Threat | Severity | Mitigation |
 |---|---|---|---|
 | 1 | Cleartext credential on disk | 🔴 High | Owner rotates 🔴 **outstanding** |
-| 2 | No remote → no review gate before a change lands | 🟠 Medium | Local commits only; 1 commit exists |
+| 2 | ✅ Review gate now enforced | 🟢 Resolved | 1 approving review required on all 3 protected branches |
 | 3 | No CI → a broken link or leaked secret ships unnoticed | 🟠 Medium | Manual checks performed once |
 | 4 | No directory-ownership enforcement | 🟠 Medium | Convention only (`AGENTS.md` §C.3) |
 | 5 | Photographic evidence misrepresented | 🟠 Medium | Recorded in the claim-evidence matrix |

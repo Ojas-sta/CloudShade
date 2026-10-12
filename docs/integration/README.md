@@ -8,7 +8,11 @@
 ## 🔴 Read this first
 
 **There is no source code in this repository.** 0 implementation files · 0 tests
-· 0 builds · 0 CI · 0 remotes · 0 capabilities demonstrated.
+· 0 builds · 0 CI · 0 capabilities demonstrated.
+
+> ⚠️ **Since 2026-10-11 there is a public remote with three protected branches and
+> one worktree per agent.** Git has been set up; 🔴 **no software has.** See
+> [`AGENT_BRANCH_AND_PR_WORKFLOW.md`](AGENT_BRANCH_AND_PR_WORKFLOW.md).
 
 Everything in `docs/` — including this directory — is research, design and
 questions. See
@@ -59,6 +63,7 @@ down. See [`unresolved_conflicts.md`](unresolved_conflicts.md).
 | [`security_boundaries.md`](security_boundaries.md) | Trust boundaries, auth, privacy, secrets |
 | [`deployment_model.md`](deployment_model.md) | Hosting, network, topology options and constraints |
 | [`integration_test_plan.md`](integration_test_plan.md) | 🔴 **No test can be run today.** What becomes possible, and when |
+| [`AGENT_BRANCH_AND_PR_WORKFLOW.md`](AGENT_BRANCH_AND_PR_WORKFLOW.md) | 🔴 **Live.** Branches, worktrees, PRs, stacking, approval |
 
 ### Exhibition
 
@@ -93,8 +98,8 @@ brief:
 |---|---|
 | Verify any capability | Nothing has been built |
 | Demonstrate anything | 0 source files, 0 hardware access |
-| Open a pull request | No remote, no hosting |
-| Receive an agent response | 🔴 **No delivery mechanism exists** |
+| Open a pull request | ✅ → your lane; 1 approval required |
+| Receive an agent response | ✅ PR comments and commits on `origin` |
 | Pass a go/no-go gate | Gates need evidence; evidence needs the school |
 | Fix a subsystem defect | 🔴 Agent 3 does not own either subsystem |
 
